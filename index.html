@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mishika, Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#FFD3CE;
+    --sky-bottom:#FFF1EE;
+    --deep:#A6302A;
+    --mid:#E2574C;
+    --ink:#4A1B16;
+    --card:#FFF6F2;
+    --pink:#FFB4A8;
+    --yellow:#FFD976;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Baloo 2', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,0.5), transparent 40%),
+      radial-gradient(circle at 85% 40%, rgba(255,255,255,0.35), transparent 45%),
+      radial-gradient(circle at 30% 80%, rgba(255,255,255,0.3), transparent 45%),
+      linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 40%, #FFE0DA 70%, #FFF1EE 100%);
+    background-attachment:fixed;
+    overflow-x:hidden;
+  }
+  .pixel-font{ font-family:'Press Start 2P', monospace; }
+
+  /* floating pixel clouds */
+  .cloud{
+    position:absolute;
+    image-rendering:pixelated;
+    opacity:0.9;
+    animation: drift linear infinite;
+  }
+  @keyframes drift{
+    from{ transform:translateX(-120px); }
+    to{ transform:translateX(calc(100vw + 120px)); }
+  }
+
+  section{
+    position:relative;
+    max-width:880px;
+    margin:0 auto;
+    padding:60px 24px;
+  }
+
+  /* pixel window card */
+  .pixel-card{
+    background:var(--card);
+    border:4px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--deep);
+    border-radius:2px;
+    position:relative;
+  }
+  .pixel-titlebar{
+    background:var(--deep);
+    color:var(--white);
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    padding:8px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    letter-spacing:1px;
+  }
+  .pixel-dots{ display:flex; gap:6px; }
+  .pixel-dots span{
+    width:8px;height:8px;background:var(--white);display:block;
+  }
+  .pixel-body{ padding:24px; }
+
+  /* hero */
+  .hero{
+    text-align:center;
+    padding-top:40px;
+  }
+  .hero h1{
+    font-family:'Press Start 2P', monospace;
+    font-size:clamp(20px, 5vw, 34px);
+    color:var(--deep);
+    text-shadow:3px 3px 0 var(--white);
+    margin:24px 0 14px;
+    line-height:1.5;
+  }
+  .hero p.tag{
+    font-size:17px;
+    max-width:520px;
+    margin:0 auto;
+    color:var(--ink);
+    opacity:0.85;
+  }
+  canvas#avatar{
+    image-rendering:pixelated;
+    margin-top:10px;
+    animation: heartbeat 1.6s ease-in-out infinite;
+  }
+  @keyframes heartbeat{
+    0%,100%{ transform:scale(1); }
+    25%{ transform:scale(1.08); }
+    40%{ transform:scale(0.98); }
+    55%{ transform:scale(1.05); }
+  }
+  .island{
+    position:relative;
+    display:inline-block;
+    animation: bob 3.2s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0px); }
+    50%{ transform:translateY(-10px); }
+  }
+  .sparkle{
+    position:absolute;
+    font-size:20px;
+    animation: twinkle 1.8s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:0.3; transform:scale(0.8) rotate(0deg); }
+    50%{ opacity:1; transform:scale(1.1) rotate(10deg); }
+  }
+
+  h2.section-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:16px;
+    color:var(--deep);
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  h2.section-title::before{
+    content:'';
+    width:14px;height:14px;
+    background:var(--yellow);
+    border:2px solid var(--ink);
+    display:inline-block;
+  }
+
+  .about-text{
+    font-size:16px;
+    line-height:1.85;
+  }
+  .about-text b{ color:var(--deep); }
+
+  /* interest grid */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:18px;
+    margin-top:8px;
+  }
+  .interest-card{
+    background:var(--white);
+    border:3px solid var(--ink);
+    box-shadow:4px 4px 0 var(--mid);
+    padding:16px;
+    transition:transform .15s ease;
+  }
+  .interest-card:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--mid); }
+  .interest-card .emoji{ font-size:26px; }
+  .interest-card h3{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:var(--deep);
+    margin:10px 0 8px;
+    line-height:1.6;
+  }
+  .interest-card p{ font-size:14px; margin:0; line-height:1.6; opacity:0.9; }
+
+  .skill-card{
+    background:var(--white);
+    border:3px solid var(--ink);
+    box-shadow:4px 4px 0 var(--mid);
+    padding:16px;
+  }
+  .skill-card h3{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--deep);
+    margin:0 0 10px;
+  }
+  .skill-bar-track{
+    height:14px;
+    background:var(--sky-sottom, #FFF1EE);
+    border:2px solid var(--ink);
+    overflow:hidden;
+    margin-bottom:8px;
+  }
+  .skill-bar-fill{
+    height:100%;
+    background:repeating-linear-gradient(90deg, var(--mid) 0 6px, var(--deep) 6px 12px);
+  }
+  .skill-label{
+    font-size:13px;
+    font-weight:700;
+    opacity:0.85;
+  }
+
+  /* shows chips */
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:8px;
+  }
+  .chip{
+    background:var(--mid);
+    color:var(--white);
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:700;
+    border:3px solid var(--ink);
+    box-shadow:3px 3px 0 var(--deep);
+  }
+
+  /* rapid fire Q&A */
+  .qa-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .qa-card{
+    background:var(--white);
+    border:3px solid var(--ink);
+    box-shadow:4px 4px 0 var(--mid);
+    padding:14px 18px;
+  }
+  .qa-card .q{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:var(--deep);
+    margin-bottom:8px;
+    line-height:1.7;
+  }
+  .qa-card .a{
+    font-size:15px;
+    line-height:1.6;
+    padding-left:14px;
+    border-left:3px solid var(--yellow);
+  }
+
+  /* find me */
+  .find-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+    gap:16px;
+  }
+  .find-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--white);
+    border:3px solid var(--ink);
+    box-shadow:4px 4px 0 var(--deep);
+    padding:14px 16px;
+    text-decoration:none;
+    color:var(--ink);
+    font-weight:700;
+    font-size:14px;
+    word-break:break-word;
+  }
+  .find-card .icon{
+    font-size:20px;
+    background:var(--yellow);
+    border:2px solid var(--ink);
+    width:36px;height:36px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .find-card small{ display:block; font-weight:500; opacity:0.7; font-size:11px; margin-top:2px;}
+
+  footer{
+    text-align:center;
+    padding:40px 24px 60px;
+    font-size:14px;
+    color:var(--deep);
+    opacity:0.85;
+  }
+  footer .heart-line{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    margin-bottom:10px;
+    color:var(--deep);
+  }
+</style>
+</head>
+<body>
+
+<!-- pixel clouds -->
+<svg class="cloud" style="top:60px; left:0; animation-duration:38s;" width="60" height="24" viewBox="0 0 60 24"><rect x="10" y="8" width="40" height="10" fill="white"/><rect x="18" y="0" width="24" height="8" fill="white"/><rect x="0" y="14" width="60" height="6" fill="white"/></svg>
+<svg class="cloud" style="top:160px; left:0; animation-duration:52s; animation-delay:-10s;" width="44" height="18" viewBox="0 0 44 18"><rect x="6" y="6" width="32" height="8" fill="white"/><rect x="12" y="0" width="18" height="6" fill="white"/><rect x="0" y="11" width="44" height="5" fill="white"/></svg>
+<svg class="cloud" style="top:300px; left:0; animation-duration:44s; animation-delay:-25s;" width="50" height="20" viewBox="0 0 50 20"><rect x="8" y="7" width="34" height="8" fill="white"/><rect x="15" y="0" width="20" height="7" fill="white"/><rect x="0" y="12" width="50" height="5" fill="white"/></svg>
+
+<section class="hero">
+  <div class="island">
+    <span class="sparkle" style="top:-10px; left:10%; animation-delay:0s;">⭐</span>
+    <span class="sparkle" style="top:20px; right:8%; animation-delay:0.6s;">✨</span>
+    <span class="sparkle" style="bottom:0; left:2%; animation-delay:1.1s;">⭐</span>
+    <canvas id="avatar" width="180" height="220"></canvas>
+  </div>
+  <h1>A LITTLE<br>ABOUT MISHIKA</h1>
+  <p style="font-size:14px; opacity:0.75; margin:-6px 0 14px; letter-spacing:0.5px;">a.k.a. Mishu · Mishi · Mish</p>
+  <p class="tag">self-taught coder and a girl with way too many dreams ❤️</p>
+</section>
+
+<section>
+  <div class="pixel-card">
+    <div class="pixel-titlebar">
+      <span>ABOUT_ME.TXT</span>
+      <div class="pixel-dots"><span></span><span></span><span></span></div>
+    </div>
+    <div class="pixel-body about-text">
+      <p>Hi, I'm Mishika ❤️ I'm entirely self-taught, no coaching, no fancy resources, just curiosity and a lot of stubbornness. People who know me would probably describe me as <b>crawzyyy</b>. I'm a total oversharer, but only once I vibe with someone, and once that happens, be ready for a lot of random, unfiltered rambling.</p>
+      <p>I love talking, genuinely, a lot, but put me in front of a crowd and I go completely quiet. Funny contradiction, still working on it.</p>
+      <p>To know me is to know I laugh a lot.</p>
+      <p>Real talk, I'm still learning to code, not fully there yet. I pick things up wherever I can, mostly YouTube, jumping from tutorial to tutorial until something finally clicks.</p>
+      <p>That's pretty much me, still figuring things out, one day at a time. ❤️</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="section-title">SKILLS</h2>
+  <div class="grid">
+    <div class="skill-card">
+      <h3>PYTHON</h3>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%;"></div></div>
+      <div class="skill-label">Okay-okay</div>
+    </div>
+    <div class="skill-card">
+      <h3>JAVA</h3>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%;"></div></div>
+      <div class="skill-label">Okay-okay</div>
+    </div>
+    <div class="skill-card">
+      <h3>HTML</h3>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%;"></div></div>
+      <div class="skill-label">Okay-okay</div>
+    </div>
+    <div class="skill-card">
+      <h3>C++</h3>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:35%;"></div></div>
+      <div class="skill-label">Less than okay</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="section-title">WHAT I'M INTO</h2>
+  <div class="grid">
+    <div class="interest-card">
+      <div class="emoji">🎮</div>
+      <h3>Gaming & Making Games</h3>
+      <p>I play games, and I'm learning to build them too, deep in Canvas/JS right now.</p>
+    </div>
+    <div class="interest-card">
+      <div class="emoji">💻</div>
+      <h3>Tech</h3>
+      <p>Interested in tech since childhood, still learning something new every day.</p>
+    </div>
+    <div class="interest-card">
+      <div class="emoji">📚</div>
+      <h3>Studying</h3>
+      <p>When I'm actually in the mood, I genuinely enjoy it. Just need the motivation to start.</p>
+    </div>
+    <div class="interest-card">
+      <div class="emoji">🎨</div>
+      <h3>Drawing</h3>
+      <p>Can copy almost anything beautifully, still working on original ideas of my own.</p>
+    </div>
+    <div class="interest-card">
+      <div class="emoji">📸</div>
+      <h3>Photography</h3>
+      <p>A quiet interest, no camera yet, someday.</p>
+    </div>
+    <div class="interest-card">
+      <div class="emoji">👋</div>
+      <h3>Meeting New People</h3>
+      <p>Especially the ones who feel a little insane, like me. Instant vibe check.</p>
+    </div>
+    <div class="interest-card">
+      <div class="emoji">✍️</div>
+      <h3>Poems & Letters</h3>
+      <p>Handwritten, heartfelt ones especially. I read them and I write my own too.</p>
+    </div>
+    <div class="interest-card">
+      <div class="emoji">🎸</div>
+      <h3>Guitar</h3>
+      <p>Don't own one yet, but I really want to.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="section-title">RAPID FIRE</h2>
+  <div class="qa-list">
+    <div class="qa-card">
+      <div class="q">Q: WHAT'S YOUR FAVORITE WAY TO WASTE TIME?</div>
+      <div class="a">Doomscrolling. No shame, just facts.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: SOMETHING YOU WANT TO START LEARNING?</div>
+      <div class="a">How to be more productive.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: COMFORT FOOD?</div>
+      <div class="a">Dahi bhalle. No contest.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: A WORD YOUR FRIENDS WOULD USE FOR YOU?</div>
+      <div class="a">Mad.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: WHAT ARE YOU MOST SCARED OF?</div>
+      <div class="a">Losing the people I love.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: MASTER OF ANYTHING FOR ONE DAY, WHAT WOULD IT BE?</div>
+      <div class="a">All the knowledge in the world, just handed to me.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: RANDOM CURRENT OBSESSION?</div>
+      <div class="a">Idk, so many things honestly.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: FAVORITE COLOR?</div>
+      <div class="a">I like every color, but if I have to be specific, red.</div>
+    </div>
+    <div class="qa-card">
+      <div class="q">Q: WHAT DO YOU LISTEN TO?</div>
+      <div class="a">Everything, as long as it has vibe, I'm in.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="section-title">SHOWS I'VE WATCHED</h2>
+  <div class="chip-row">
+    <div class="chip">Modern Family</div>
+    <div class="chip">Friends</div>
+    <div class="chip">The Vampire Diaries</div>
+    <div class="chip">The Neighborhood</div>
+    <div class="chip">2 Broke Girls</div>
+  </div>
+</section>
+
+<section>
+  <h2 class="section-title">FIND ME</h2>
+  <div class="find-grid">
+    <a class="find-card" href="mailto:mishika0749@gmail.com">
+      <span class="icon">📧</span>
+      <span>mishika0749@gmail.com<small>Gmail</small></span>
+    </a>
+    <a class="find-card" href="https://github.com/justmishchief" target="_blank" rel="noopener">
+      <span class="icon">🐙</span>
+      <span>justmishchief<small>GitHub</small></span>
+    </a>
+    <a class="find-card" href="https://www.linkedin.com/in/mishika-%E3%85%A4-73120b42a" target="_blank" rel="noopener">
+      <span class="icon">💼</span>
+      <span>Mishika<small>LinkedIn</small></span>
+    </a>
+    <div class="find-card">
+      <span class="icon">💬</span>
+      <span>U0BBNTHLJMR<small>Slack ID</small></span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="heart-line">MADE WITH ❤️ BY MISHIKA</div>
+  <div style="margin-top:10px;">there's a lot riding on these dreams, i hope, so hard, that they all come true.</div>
+  <div style="margin-top:10px; font-weight:700;">I'M NOT MUCH, BUT I AM ALL I HAVE.</div>
+</footer>
+
+<script>
+// ---- pixel avatar: same grid + color technique from the hackathon game ----
+const canvas = document.getElementById('avatar');
+const ctx = canvas.getContext('2d');
+
+const colors = {
+  1: '#A6302A', // heart outline
+  2: '#E2574C', // heart fill
+  3: '#FFA79B', // heart highlight
+};
+
+// simple pixel heart, same grid+color technique as before
+const heart = [
+  [0,0,1,1,0,0,0,1,1,0,0],
+  [0,1,2,2,1,1,1,2,2,1,0],
+  [1,2,3,2,2,2,2,2,2,2,1],
+  [1,2,2,2,2,2,2,2,2,2,1],
+  [1,2,2,2,2,2,2,2,2,2,1],
+  [0,1,2,2,2,2,2,2,2,1,0],
+  [0,0,1,2,2,2,2,2,1,0,0],
+  [0,0,0,1,2,2,2,1,0,0,0],
+  [0,0,0,0,1,2,1,0,0,0,0],
+  [0,0,0,0,0,1,0,0,0,0,0],
+];
+
+function drawSprite(grid, offsetX, offsetY, scale) {
+  for (let row = 0; row < grid.length; row++) {
+    for (let col = 0; col < grid[row].length; col++) {
+      const code = grid[row][col];
+      if (code === 0) continue;
+      ctx.fillStyle = colors[code];
+      ctx.fillRect(offsetX + col*scale, offsetY + row*scale, scale, scale);
+    }
+  }
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  const scale = 14;
+  drawSprite(heart, 15, 20, scale);
+
+  // shadow underneath
+  ctx.fillStyle = 'rgba(28,58,82,0.15)';
+  ctx.beginPath();
+  ctx.ellipse(90, 200, 50, 9, 0, 0, Math.PI*2);
+  ctx.fill();
+}
+draw();
+// heartbeat scaling is handled by the CSS animation on the canvas element,
+// so we just need to draw once, no animation loop needed here.
+</script>
+</body>
+</html>
