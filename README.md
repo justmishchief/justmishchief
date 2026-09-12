@@ -7,7 +7,6 @@ A little pixel-themed corner of the internet, everything about me in one page ‚ù
 - Skills
 - What I'm into
 - Rapid fire Q&A
-- Shows I've watched
 - Find me (links)
 
 Built and designed by me, styled in a warm red/coral pixel-art theme.
