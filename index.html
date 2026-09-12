@@ -2,531 +2,2450 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A Little Bit Of Mishika</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>justmishchief</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --sky-top:#FFD3CE;
-    --sky-bottom:#FFF1EE;
-    --deep:#A6302A;
-    --mid:#E2574C;
-    --ink:#4A1B16;
-    --card:#FFF6F2;
-    --pink:#FFB4A8;
-    --yellow:#FFD976;
-    --white:#FFFFFF;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    font-family:'Baloo 2', sans-serif;
-    color:var(--ink);
-    background:
-      radial-gradient(circle at 20% 15%, rgba(255,255,255,0.5), transparent 40%),
-      radial-gradient(circle at 85% 40%, rgba(255,255,255,0.35), transparent 45%),
-      radial-gradient(circle at 30% 80%, rgba(255,255,255,0.3), transparent 45%),
-      linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 40%, #FFE0DA 70%, #FFF1EE 100%);
-    background-attachment:fixed;
-    overflow-x:hidden;
-  }
-  .pixel-font{ font-family:'Press Start 2P', monospace; }
 
-  /* floating pixel clouds */
-  .cloud{
-    position:absolute;
-    image-rendering:pixelated;
-    opacity:0.9;
-    animation: drift linear infinite;
-  }
-  @keyframes drift{
-    from{ transform:translateX(-120px); }
-    to{ transform:translateX(calc(100vw + 120px)); }
-  }
+/* =========================
+   VARIABLES
+========================= */
 
-  section{
-    position:relative;
-    max-width:880px;
-    margin:0 auto;
-    padding:60px 24px;
-  }
+:root {
+    --paper: #f1efe9;
+    --ink: #151515;
+    --muted: #85817a;
+    --line: #cbc7be;
+    --red: #ff3156;
 
-  /* pixel window card */
-  .pixel-card{
-    background:var(--card);
-    border:4px solid var(--ink);
-    box-shadow: 6px 6px 0 var(--deep);
-    border-radius:2px;
-    position:relative;
-  }
-  .pixel-titlebar{
-    background:var(--deep);
-    color:var(--white);
-    font-family:'Press Start 2P', monospace;
-    font-size:11px;
-    padding:8px 12px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    letter-spacing:1px;
-  }
-  .pixel-dots{ display:flex; gap:6px; }
-  .pixel-dots span{
-    width:8px;height:8px;background:var(--white);display:block;
-  }
-  .pixel-body{ padding:24px; }
+    --serif: "Instrument Serif", serif;
+    --mono: "DM Mono", monospace;
+}
 
-  /* hero */
-  .hero{
-    text-align:center;
-    padding-top:40px;
-  }
-  .hero h1{
-    font-family:'Press Start 2P', monospace;
-    font-size:clamp(20px, 5vw, 34px);
-    color:var(--deep);
-    text-shadow:3px 3px 0 var(--white);
-    margin:24px 0 14px;
-    line-height:1.5;
-  }
-  .hero p.tag{
-    font-size:17px;
-    max-width:520px;
-    margin:0 auto;
-    color:var(--ink);
-    opacity:0.85;
-  }
-  canvas#avatar{
-    image-rendering:pixelated;
-    margin-top:10px;
-    animation: heartbeat 1.6s ease-in-out infinite;
-  }
-  @keyframes heartbeat{
-    0%,100%{ transform:scale(1); }
-    25%{ transform:scale(1.08); }
-    40%{ transform:scale(0.98); }
-    55%{ transform:scale(1.05); }
-  }
-  .island{
-    position:relative;
-    display:inline-block;
-    animation: bob 3.2s ease-in-out infinite;
-  }
-  @keyframes bob{
-    0%,100%{ transform:translateY(0px); }
-    50%{ transform:translateY(-10px); }
-  }
-  .sparkle{
-    position:absolute;
-    font-size:20px;
-    animation: twinkle 1.8s ease-in-out infinite;
-  }
-  @keyframes twinkle{
-    0%,100%{ opacity:0.3; transform:scale(0.8) rotate(0deg); }
-    50%{ opacity:1; transform:scale(1.1) rotate(10deg); }
-  }
+body.dark {
+    --paper: #10100f;
+    --ink: #f1efe9;
+    --muted: #99958d;
+    --line: #393733;
+    --red: #ff4165;
+}
 
-  h2.section-title{
-    font-family:'Press Start 2P', monospace;
-    font-size:16px;
-    color:var(--deep);
-    margin-bottom:22px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  h2.section-title::before{
-    content:'';
-    width:14px;height:14px;
-    background:var(--yellow);
-    border:2px solid var(--ink);
-    display:inline-block;
-  }
 
-  .about-text{
-    font-size:16px;
-    line-height:1.85;
-  }
-  .about-text b{ color:var(--deep); }
+/* =========================
+   RESET
+========================= */
 
-  /* interest grid */
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
-    gap:18px;
-    margin-top:8px;
-  }
-  .interest-card{
-    background:var(--white);
-    border:3px solid var(--ink);
-    box-shadow:4px 4px 0 var(--mid);
-    padding:16px;
-    transition:transform .15s ease;
-  }
-  .interest-card:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--mid); }
-  .interest-card .emoji{ font-size:26px; }
-  .interest-card h3{
-    font-family:'Press Start 2P', monospace;
-    font-size:11px;
-    color:var(--deep);
-    margin:10px 0 8px;
-    line-height:1.6;
-  }
-  .interest-card p{ font-size:14px; margin:0; line-height:1.6; opacity:0.9; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-  .skill-card{
-    background:var(--white);
-    border:3px solid var(--ink);
-    box-shadow:4px 4px 0 var(--mid);
-    padding:16px;
-  }
-  .skill-card h3{
-    font-family:'Press Start 2P', monospace;
-    font-size:12px;
-    color:var(--deep);
-    margin:0 0 10px;
-  }
-  .skill-bar-track{
-    height:14px;
-    background:var(--sky-sottom, #FFF1EE);
-    border:2px solid var(--ink);
-    overflow:hidden;
-    margin-bottom:8px;
-  }
-  .skill-bar-fill{
-    height:100%;
-    background:repeating-linear-gradient(90deg, var(--mid) 0 6px, var(--deep) 6px 12px);
-  }
-  .skill-label{
-    font-size:13px;
-    font-weight:700;
-    opacity:0.85;
-  }
+html {
+    scroll-behavior: smooth;
+}
 
-  /* shows chips */
-  .chip-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:8px;
-  }
-  .chip{
-    background:var(--mid);
-    color:var(--white);
-    padding:8px 14px;
-    font-size:13px;
-    font-weight:700;
-    border:3px solid var(--ink);
-    box-shadow:3px 3px 0 var(--deep);
-  }
+body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Manrope", sans-serif;
+    overflow-x: hidden;
 
-  /* rapid fire Q&A */
-  .qa-list{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-  }
-  .qa-card{
-    background:var(--white);
-    border:3px solid var(--ink);
-    box-shadow:4px 4px 0 var(--mid);
-    padding:14px 18px;
-  }
-  .qa-card .q{
-    font-family:'Press Start 2P', monospace;
-    font-size:10px;
-    color:var(--deep);
-    margin-bottom:8px;
-    line-height:1.7;
-  }
-  .qa-card .a{
-    font-size:15px;
-    line-height:1.6;
-    padding-left:14px;
-    border-left:3px solid var(--yellow);
-  }
+    transition:
+        background 0.45s ease,
+        color 0.45s ease;
+}
 
-  /* find me */
-  .find-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
-    gap:16px;
-  }
-  .find-card{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    background:var(--white);
-    border:3px solid var(--ink);
-    box-shadow:4px 4px 0 var(--deep);
-    padding:14px 16px;
-    text-decoration:none;
-    color:var(--ink);
-    font-weight:700;
-    font-size:14px;
-    word-break:break-word;
-  }
-  .find-card .icon{
-    font-size:20px;
-    background:var(--yellow);
-    border:2px solid var(--ink);
-    width:36px;height:36px;
-    display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
-  }
-  .find-card small{ display:block; font-weight:500; opacity:0.7; font-size:11px; margin-top:2px;}
+a {
+    color: inherit;
+    text-decoration: none;
+}
 
-  footer{
-    text-align:center;
-    padding:40px 24px 60px;
-    font-size:14px;
-    color:var(--deep);
-    opacity:0.85;
-  }
-  footer .heart-line{
-    font-family:'Press Start 2P', monospace;
-    font-size:11px;
-    margin-bottom:10px;
-    color:var(--deep);
-  }
+button {
+    color: inherit;
+    font: inherit;
+}
+
+::selection {
+    background: var(--red);
+    color: white;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page {
+    width: min(1500px, 100%);
+    margin: auto;
+    padding: 0 42px;
+}
+
+
+/* =========================
+   CUSTOM CURSOR
+========================= */
+
+@media (min-width: 801px) {
+
+    body,
+    a,
+    button {
+        cursor: none;
+    }
+
+    .cursor {
+        position: fixed;
+
+        width: 34px;
+        height: 34px;
+
+        border: 1px solid var(--red);
+        border-radius: 50%;
+
+        pointer-events: none;
+
+        z-index: 99999;
+
+        transform: translate(-50%, -50%);
+
+        transition:
+            width 0.25s ease,
+            height 0.25s ease,
+            background 0.25s ease;
+    }
+
+    .cursor::before,
+    .cursor::after {
+        content: "";
+
+        position: absolute;
+
+        background: var(--red);
+    }
+
+    .cursor::before {
+        width: 1px;
+        height: 10px;
+
+        left: 50%;
+        top: -6px;
+
+        transform: translateX(-50%);
+    }
+
+    .cursor::after {
+        width: 10px;
+        height: 1px;
+
+        top: 50%;
+        left: -6px;
+
+        transform: translateY(-50%);
+    }
+
+    .cursor-dot {
+        position: absolute;
+
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: var(--red);
+
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-50%, -50%);
+    }
+
+    .cursor.hover {
+        width: 62px;
+        height: 62px;
+
+        background: rgba(255, 49, 86, 0.09);
+    }
+}
+
+@media (max-width: 800px) {
+
+    .cursor {
+        display: none;
+    }
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+    min-height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid var(--line);
+
+    font-family: var(--mono);
+    font-size: 10px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.mark {
+    width: 29px;
+    height: 29px;
+
+    border: 1px solid var(--ink);
+
+    display: grid;
+    place-items: center;
+
+    font-family: var(--serif);
+    font-size: 18px;
+
+    transform: rotate(-7deg);
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.top-right a {
+    position: relative;
+}
+
+.top-right a::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: -6px;
+
+    width: 0;
+    height: 1px;
+
+    background: var(--red);
+
+    transition: width 0.25s ease;
+}
+
+.top-right a:hover::after {
+    width: 100%;
+}
+
+.theme-toggle {
+    border: 0;
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 0;
+
+    font-family: var(--mono);
+    font-size: 9px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.theme-icon {
+    width: 23px;
+    height: 23px;
+
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    transition: transform 0.4s ease;
+}
+
+.theme-toggle:hover .theme-icon {
+    transform: rotate(180deg);
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: calc(100vh - 78px);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+
+    padding: 80px 0 90px;
+
+    position: relative;
+}
+
+.hero-small {
+    position: absolute;
+
+    top: 35px;
+    right: 0;
+
+    font-family: var(--mono);
+    font-size: 9px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 35px;
+
+    font-family: var(--mono);
+    font-size: 10px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.eyebrow::before {
+    content: "";
+
+    width: 42px;
+    height: 1px;
+
+    background: var(--red);
+}
+
+.hero-name {
+    font-family: var(--serif);
+    font-weight: 400;
+
+    font-size: clamp(105px, 14vw, 215px);
+
+    line-height: 0.72;
+
+    letter-spacing: -0.075em;
+
+    white-space: nowrap;
+
+    color: var(--ink);
+}
+
+.hero-note {
+    margin-top: 72px;
+
+    max-width: 490px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.95;
+}
+
+.hero-note strong {
+    color: var(--ink);
+}
+
+
+/* =========================
+   ORBIT
+========================= */
+
+.hero-right {
+    height: 520px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orbit-wrap {
+    width: 470px;
+    max-width: 100%;
+
+    position: relative;
+}
+
+.orbit {
+    width: 390px;
+    max-width: 82vw;
+
+    aspect-ratio: 1;
+
+    margin: auto;
+
+    position: relative;
+
+    border: 1px solid var(--line);
+
+    border-radius: 50%;
+
+    touch-action: none;
+    user-select: none;
+}
+
+.orbit::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 12%;
+
+    border: 1px dashed var(--line);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.orbit-dot {
+    position: absolute;
+
+    width: 21px;
+    height: 21px;
+
+    border-radius: 50%;
+
+    background: var(--red);
+
+    left: 50%;
+    top: 5%;
+
+    transform: translate(-50%, -50%);
+
+    box-shadow:
+        0 0 0 9px rgba(255, 49, 86, 0.10),
+        0 0 25px rgba(255, 49, 86, 0.18);
+
+    z-index: 5;
+
+    touch-action: none;
+}
+
+.orbit-center {
+    position: absolute;
+
+    width: 118px;
+    height: 118px;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: var(--ink);
+    color: var(--paper);
+
+    display: grid;
+    place-items: center;
+
+    font-family: var(--serif);
+    font-size: 30px;
+
+    transition:
+        background 0.45s ease,
+        color 0.45s ease;
+}
+
+.orbit-center-text {
+    transition: opacity 0.15s ease;
+}
+
+.orbit-instruction {
+    position: absolute;
+
+    top: -15px;
+    right: 0;
+
+    width: 165px;
+
+    font-family: var(--serif);
+    font-style: italic;
+
+    font-size: 17px;
+    line-height: 1.05;
+
+    color: var(--ink);
+
+    transform: rotate(-5deg);
+
+    z-index: 10;
+
+    pointer-events: none;
+}
+
+.orbit-instruction::before {
+    content: "";
+
+    position: absolute;
+
+    width: 43px;
+    height: 1px;
+
+    left: -51px;
+    top: 32px;
+
+    background: var(--ink);
+
+    transform: rotate(-24deg);
+}
+
+.orbit-instruction::after {
+    content: "↘";
+
+    position: absolute;
+
+    left: -62px;
+    top: 21px;
+
+    font-family: var(--mono);
+    font-size: 17px;
+}
+
+
+/* =========================
+   GENERAL
+========================= */
+
+.label {
+    margin-bottom: 42px;
+
+    font-family: var(--mono);
+    font-size: 9px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+
+    color: var(--muted);
+}
+
+
+/* =========================
+   INTRO
+========================= */
+
+.intro {
+    padding: 145px 0;
+
+    display: grid;
+
+    grid-template-columns: 120px 1fr;
+
+    gap: 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.section-number {
+    font-family: var(--mono);
+    font-size: 10px;
+
+    color: var(--red);
+
+    padding-top: 10px;
+}
+
+.intro-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        230px;
+
+    gap: 70px;
+
+    align-items: end;
+}
+
+.intro-text {
+    max-width: 1100px;
+
+    font-size: clamp(35px, 5vw, 73px);
+
+    line-height: 1.04;
+
+    letter-spacing: -0.045em;
+}
+
+.quiet {
+    color: var(--muted);
+}
+
+.serif {
+    font-family: var(--serif);
+    font-style: italic;
+}
+
+
+/* =========================
+   INTRO MINDSET
+========================= */
+
+.intro-mindset {
+    border-left: 1px solid var(--line);
+
+    padding-left: 25px;
+    padding-bottom: 8px;
+}
+
+.mindset-label {
+    display: block;
+
+    margin-bottom: 18px;
+
+    font-family: var(--mono);
+
+    font-size: 8px;
+
+    color: var(--red);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.14em;
+}
+
+.intro-mindset p {
+    font-family: var(--serif);
+
+    font-size: 28px;
+
+    line-height: 0.95;
+
+    letter-spacing: -0.02em;
+}
+
+.intro-mindset em {
+    color: var(--red);
+
+    font-style: italic;
+}
+
+
+/* =========================
+   ABOUT
+========================= */
+
+.about {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.about-block {
+    padding: 80px 55px 95px 0;
+}
+
+.about-block + .about-block {
+    border-left: 1px solid var(--line);
+
+    padding-left: 55px;
+}
+
+.about-big {
+    font-family: var(--serif);
+
+    font-size: clamp(42px, 5vw, 70px);
+
+    line-height: 0.96;
+
+    letter-spacing: -0.03em;
+}
+
+.about-big em {
+    color: var(--red);
+
+    font-style: italic;
+}
+
+.about-copy {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 2;
+}
+
+.about-copy p + p {
+    margin-top: 22px;
+}
+
+
+/* =========================
+   WORK
+========================= */
+
+.work {
+    padding: 150px 0;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.work-header {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: end;
+
+    margin-bottom: 65px;
+}
+
+.work-title {
+    font-family: var(--serif);
+
+    font-size: clamp(75px, 10vw, 145px);
+
+    line-height: 0.75;
+
+    letter-spacing: -0.055em;
+}
+
+.work-title em {
+    color: var(--red);
+
+    font-style: italic;
+}
+
+.work-intro {
+    max-width: 360px;
+
+    justify-self: end;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.9;
+}
+
+.project {
+    display: grid;
+
+    grid-template-columns:
+        90px
+        1fr
+        220px;
+
+    padding: 35px 0;
+
+    border-top: 1px solid var(--ink);
+
+    transition:
+        padding 0.3s ease,
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+.project:last-child {
+    border-bottom: 1px solid var(--ink);
+}
+
+.project:hover {
+    padding-left: 18px;
+    padding-right: 18px;
+
+    background: var(--ink);
+
+    color: var(--paper);
+}
+
+.project-no {
+    font-family: var(--mono);
+
+    font-size: 10px;
+
+    color: var(--red);
+}
+
+.project-name {
+    font-family: var(--serif);
+
+    font-size: clamp(40px, 5vw, 70px);
+
+    line-height: 0.85;
+}
+
+.project-description {
+    max-width: 580px;
+
+    margin-top: 20px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.9;
+}
+
+.project-meta {
+    justify-self: end;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    text-align: right;
+
+    font-family: var(--mono);
+
+    font-size: 8px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+}
+
+.project-link {
+    color: var(--ink);
+
+    border-bottom: 1px solid currentColor;
+
+    padding-bottom: 5px;
+}
+
+.project:hover .project-link {
+    color: var(--paper);
+}
+
+
+/* =========================
+   CURRENTLY
+========================= */
+
+.currently {
+    width: 100%;
+
+    padding: 150px 0;
+
+    background: var(--paper);
+
+    color: var(--ink);
+
+    border-bottom: 1px solid var(--line);
+
+    transition:
+        background 0.45s ease,
+        color 0.45s ease;
+}
+
+.currently-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 100px;
+
+    align-items: center;
+}
+
+.currently-label {
+    margin-bottom: 55px;
+
+    font-family: var(--mono);
+
+    font-size: 10px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.12em;
+}
+
+.currently-title {
+    font-family: var(--serif);
+
+    font-weight: 400;
+
+    font-size: clamp(90px, 11vw, 155px);
+
+    line-height: 0.68;
+
+    letter-spacing: -0.065em;
+
+    color: var(--ink);
+}
+
+.currently-title em {
+    color: var(--red);
+
+    font-style: italic;
+}
+
+.currently-copy {
+    max-width: 500px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 2;
+}
+
+.currently-copy p + p {
+    margin-top: 22px;
+}
+
+.currently-copy strong {
+    color: var(--ink);
+}
+
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact {
+    padding: 140px 0 70px;
+}
+
+.contact-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 70px;
+}
+
+.contact-heading {
+    font-family: var(--serif);
+
+    font-size: clamp(85px, 13vw, 190px);
+
+    line-height: 0.7;
+
+    letter-spacing: -0.065em;
+}
+
+.contact-heading em {
+    color: var(--red);
+
+    font-style: italic;
+}
+
+.contact-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 40px;
+
+    margin-top: 75px;
+}
+
+.contact-note {
+    max-width: 390px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.9;
+}
+
+.contact-links {
+    justify-self: end;
+
+    width: min(440px, 100%);
+}
+
+.contact-link {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 18px 0;
+
+    border-bottom: 1px solid var(--line);
+
+    font-family: var(--mono);
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    transition:
+        color 0.2s ease,
+        padding 0.2s ease;
+}
+
+.contact-link:hover {
+    color: var(--red);
+
+    padding-left: 8px;
+}
+
+.contact-link span:last-child {
+    color: var(--muted);
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    margin-top: 100px;
+
+    padding: 22px 0;
+
+    border-top: 1px solid var(--line);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-family: var(--mono);
+
+    font-size: 8px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.06em;
+}
+
+.footer-love {
+    color: var(--ink);
+}
+
+.footer-love b {
+    color: var(--red);
+
+    font-size: 11px;
+}
+
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal {
+    opacity: 0;
+
+    transform: translateY(28px);
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+.reveal.show {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    .page {
+        padding: 0 20px;
+    }
+
+
+    /* TOP */
+
+    .topbar {
+        min-height: 68px;
+    }
+
+    .top-left span {
+        display: block;
+
+        font-size: 8px;
+    }
+
+    .top-right {
+        gap: 13px;
+
+        font-size: 8px;
+    }
+
+    .theme-toggle {
+        font-size: 8px;
+    }
+
+    .theme-icon {
+        width: 21px;
+        height: 21px;
+    }
+
+
+    /* HERO */
+
+    .hero {
+        min-height: auto;
+
+        grid-template-columns: 1fr;
+
+        padding: 90px 0 70px;
+    }
+
+    .hero-small {
+        position: static;
+
+        text-align: right;
+
+        margin-bottom: 45px;
+    }
+
+    .hero-name {
+        font-size: 22vw;
+
+        letter-spacing: -0.08em;
+    }
+
+    .hero-note {
+        margin-top: 58px;
+
+        font-size: 12px;
+    }
+
+
+    /* ORBIT */
+
+    .hero-right {
+        height: 390px;
+
+        margin-top: 35px;
+    }
+
+    .orbit-wrap {
+        width: 100%;
+    }
+
+    .orbit {
+        width: min(330px, 82vw);
+    }
+
+    .orbit-center {
+        width: 100px;
+        height: 100px;
+
+        font-size: 27px;
+    }
+
+    .orbit-instruction {
+        top: -5px;
+        right: 3px;
+
+        width: 125px;
+
+        font-size: 14px;
+    }
+
+    .orbit-instruction::before {
+        width: 28px;
+
+        left: -36px;
+    }
+
+    .orbit-instruction::after {
+        left: -46px;
+    }
+
+
+    /* INTRO */
+
+    .intro {
+        padding: 100px 0;
+
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+    }
+
+    .intro-layout {
+        grid-template-columns: 1fr;
+
+        gap: 55px;
+    }
+
+    .intro-text {
+        font-size: 11vw;
+    }
+
+    .intro-mindset {
+        border-left: 0;
+
+        border-top: 1px solid var(--line);
+
+        padding-left: 0;
+
+        padding-top: 25px;
+
+        padding-bottom: 0;
+    }
+
+    .intro-mindset p {
+        font-size: 32px;
+    }
+
+
+    /* ABOUT */
+
+    .about {
+        grid-template-columns: 1fr;
+    }
+
+    .about-block,
+    .about-block + .about-block {
+        padding: 65px 0;
+    }
+
+    .about-block + .about-block {
+        border-left: 0;
+
+        border-top: 1px solid var(--line);
+    }
+
+
+    /* WORK */
+
+    .work {
+        padding: 100px 0;
+    }
+
+    .work-header {
+        grid-template-columns: 1fr;
+    }
+
+    .work-intro {
+        justify-self: start;
+
+        margin-top: 45px;
+    }
+
+    .project {
+        grid-template-columns:
+            40px
+            1fr;
+
+        gap: 10px;
+    }
+
+    .project-meta {
+        grid-column: 2;
+
+        justify-self: start;
+
+        flex-direction: row;
+
+        gap: 30px;
+
+        margin-top: 30px;
+
+        text-align: left;
+    }
+
+
+    /* CURRENTLY */
+
+    .currently {
+        padding: 100px 0;
+    }
+
+    .currently-grid {
+        grid-template-columns: 1fr;
+
+        gap: 65px;
+    }
+
+    .currently-label {
+        margin-bottom: 45px;
+    }
+
+    .currently-title {
+        font-size: 22vw;
+    }
+
+    .currently-copy {
+        max-width: 100%;
+
+        font-size: 12px;
+    }
+
+
+    /* CONTACT */
+
+    .contact {
+        padding-top: 100px;
+    }
+
+    .contact-top {
+        display: block;
+
+        margin-bottom: 55px;
+    }
+
+    .contact-top > div:last-child {
+        margin-top: 20px;
+    }
+
+    .contact-heading {
+        font-size: 22vw;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+
+        margin-top: 60px;
+    }
+
+    .contact-links {
+        justify-self: start;
+    }
+
+
+    /* FOOTER */
+
+    footer {
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .page {
+        padding: 0 16px;
+    }
+
+    .top-right {
+        gap: 10px;
+    }
+
+    .top-right a {
+        font-size: 7px;
+    }
+
+    .theme-toggle span:last-child {
+        display: none;
+    }
+
+    .hero-name {
+        font-size: 22vw;
+    }
+
+    .orbit {
+        width: 290px;
+    }
+
+    .orbit-instruction {
+        right: -5px;
+
+        font-size: 13px;
+    }
+
+    .contact-heading {
+        font-size: 21vw;
+    }
+
+}
+
 </style>
 </head>
+
+
 <body>
 
-<!-- pixel clouds -->
-<svg class="cloud" style="top:60px; left:0; animation-duration:38s;" width="60" height="24" viewBox="0 0 60 24"><rect x="10" y="8" width="40" height="10" fill="white"/><rect x="18" y="0" width="24" height="8" fill="white"/><rect x="0" y="14" width="60" height="6" fill="white"/></svg>
-<svg class="cloud" style="top:160px; left:0; animation-duration:52s; animation-delay:-10s;" width="44" height="18" viewBox="0 0 44 18"><rect x="6" y="6" width="32" height="8" fill="white"/><rect x="12" y="0" width="18" height="6" fill="white"/><rect x="0" y="11" width="44" height="5" fill="white"/></svg>
-<svg class="cloud" style="top:300px; left:0; animation-duration:44s; animation-delay:-25s;" width="50" height="20" viewBox="0 0 50 20"><rect x="8" y="7" width="34" height="8" fill="white"/><rect x="15" y="0" width="20" height="7" fill="white"/><rect x="0" y="12" width="50" height="5" fill="white"/></svg>
+
+<!-- =========================
+     CURSOR
+========================= -->
+
+<div class="cursor">
+    <div class="cursor-dot"></div>
+</div>
+
+
+<div class="page">
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<header class="topbar">
+
+    <div class="top-left">
+
+        <div class="mark">
+            M
+        </div>
+
+        <span>
+            justmishchief
+        </span>
+
+    </div>
+
+
+    <nav class="top-right">
+
+        <a href="#work">
+            work
+        </a>
+
+        <a href="#about">
+            about
+        </a>
+
+        <a href="#contact">
+            contact
+        </a>
+
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle dark mode"
+        >
+
+            <span class="theme-icon">
+                ◐
+            </span>
+
+            <span>
+                mode
+            </span>
+
+        </button>
+
+    </nav>
+
+</header>
+
+
+<!-- =========================
+     HERO
+========================= -->
 
 <section class="hero">
-  <div class="island">
-    <span class="sparkle" style="top:-10px; left:10%; animation-delay:0s;">⭐</span>
-    <span class="sparkle" style="top:20px; right:8%; animation-delay:0.6s;">✨</span>
-    <span class="sparkle" style="bottom:0; left:2%; animation-delay:1.1s;">⭐</span>
-    <canvas id="avatar" width="180" height="220"></canvas>
-  </div>
-  <h1>A LITTLE<br>ABOUT MISHIKA</h1>
-  <p style="font-size:14px; opacity:0.75; margin:-6px 0 14px; letter-spacing:0.5px;">a.k.a. Mishu · Mishi · Mish</p>
-  <p class="tag">self-taught coder and a girl with way too many dreams ❤️</p>
+
+
+    <div class="hero-small">
+        somewhere on the internet
+    </div>
+
+
+    <div>
+
+        <div class="eyebrow">
+            self-taught / still learning
+        </div>
+
+
+        <h1 class="hero-name">
+            Mishika
+        </h1>
+
+
+        <p class="hero-note">
+
+            I like making things, figuring things out,
+            and occasionally disappearing into a project
+            for far longer than I planned.
+
+            <br><br>
+
+            <strong>
+                Still learning. Still making. Still becoming.
+            </strong>
+
+        </p>
+
+    </div>
+
+
+    <!-- ORBIT -->
+
+    <div class="hero-right">
+
+        <div class="orbit-wrap">
+
+
+            <div class="orbit-instruction">
+                rotate it to know my nicknames
+            </div>
+
+
+            <div class="orbit" id="orbit">
+
+
+                <div
+                    class="orbit-dot"
+                    id="orbitDot"
+                ></div>
+
+
+                <div class="orbit-center">
+
+                    <span
+                        class="orbit-center-text"
+                        id="orbitText"
+                    >
+                        mish
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
 </section>
 
-<section>
-  <div class="pixel-card">
-    <div class="pixel-titlebar">
-      <span>ABOUT_ME.TXT</span>
-      <div class="pixel-dots"><span></span><span></span><span></span></div>
+
+<!-- =========================
+     INTRO
+========================= -->
+
+<section class="intro reveal">
+
+
+    <div class="section-number">
+        01 / INTRO
     </div>
-    <div class="pixel-body about-text">
-      <p>Hi, I'm Mishika ❤️ I'm entirely self-taught coder, no coaching, no fancy resources, just curiosity and a lot of stubbornness. People who know me would probably describe me as <b>crawzyyy</b>. I'm a total oversharer, but only once I vibe with someone, and once that happens, be ready for a lot of random, unfiltered rambling.</p>
-      <p>I love talking, genuinely, a lot, but put me in front of a crowd and I go completely quiet. Funny contradiction, still working on it.</p>
-      <p>To know me is to know I laugh a lot.</p>
-      <p>Real talk, I'm still learning to code, not fully there yet. I pick things up wherever I can, mostly YouTube, jumping from tutorial to tutorial until something finally clicks.</p>
-      <p>That's pretty much me, still figuring things out, one day at a time. ❤️</p>
+
+
+    <div class="intro-layout">
+
+
+        <div class="intro-text">
+
+            I'm a self-taught coder who likes
+
+            <span class="quiet">
+                learning by actually trying things,
+            </span>
+
+            breaking them,
+
+            <span class="serif">
+                fixing them,
+            </span>
+
+            and then wondering what else I can make.
+
+        </div>
+
+
+        <div class="intro-mindset">
+
+            <span class="mindset-label">
+                MINDSET
+            </span>
+
+            <p>
+
+                I'm not much,
+
+                <br>
+
+                <em>
+                    but I am all I have.
+                </em>
+
+            </p>
+
+        </div>
+
+
     </div>
-  </div>
+
+
 </section>
 
-<section>
-  <h2 class="section-title">SKILLS</h2>
-  <div class="grid">
-    <div class="skill-card">
-      <h3>PYTHON</h3>
-      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%;"></div></div>
-      <div class="skill-label">Okay-okay</div>
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section
+    class="about reveal"
+    id="about"
+>
+
+
+    <div class="about-block">
+
+
+        <div class="label">
+            02 / ABOUT
+        </div>
+
+
+        <div class="about-big">
+
+            No perfect roadmap.
+
+            <br>
+
+            Just
+
+            <em>
+                curiosity,
+            </em>
+
+            stubbornness
+            and a lot of tabs open.
+
+        </div>
+
+
     </div>
-    <div class="skill-card">
-      <h3>JAVA</h3>
-      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%;"></div></div>
-      <div class="skill-label">Okay-okay</div>
+
+
+    <div class="about-block">
+
+
+        <div class="label">
+            A LITTLE MORE
+        </div>
+
+
+        <div class="about-copy">
+
+
+            <p>
+
+                I didn't start with fancy resources or
+                some perfectly planned path. I mostly
+                learned because I wanted to know how
+                things worked.
+
+            </p>
+
+
+            <p>
+
+                Coding is one part of it. I like creating,
+                writing, experimenting and picking up
+                random things just because they seem
+                interesting.
+
+            </p>
+
+
+            <p>
+
+                I'm still figuring out what I want to
+                become. For now, I'm enjoying the process
+                of becoming someone who can build it.
+
+            </p>
+
+
+        </div>
+
     </div>
-    <div class="skill-card">
-      <h3>HTML</h3>
-      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%;"></div></div>
-      <div class="skill-label">Okay-okay</div>
-    </div>
-    <div class="skill-card">
-      <h3>C++</h3>
-      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:35%;"></div></div>
-      <div class="skill-label">Less than okay</div>
-    </div>
-  </div>
+
+
 </section>
 
-<section>
-  <h2 class="section-title">WHAT I'M INTO</h2>
-  <div class="grid">
-    <div class="interest-card">
-      <div class="emoji">🎮</div>
-      <h3>Games</h3>
-      <p>I play games, and I'm learning to build them too.</p>
-    </div>
-    <div class="interest-card">
-      <div class="emoji">💻</div>
-      <h3>Tech</h3>
-      <p>Interested in tech since childhood, from animation and coding to editing, still learning something new every day.</p>
-    </div>
-    <div class="interest-card">
-      <div class="emoji">📚</div>
-      <h3>Studying</h3>
-      <p>When I'm actually in the mood, I genuinely enjoy it. Just need the motivation to start.</p>
-    </div>
-    <div class="interest-card">
-      <div class="emoji">🎨</div>
-      <h3>Drawing</h3>
-      <p>Can copy almost anything beautifully, still working on original ideas of my own.</p>
-    </div>
-    <div class="interest-card">
-      <div class="emoji">📸</div>
-      <h3>Photography</h3>
-      <p>A quiet interest, no camera yet, someday.</p>
-    </div>
-    <div class="interest-card">
-      <div class="emoji">👋</div>
-      <h3>Meeting New People</h3>
-      <p>Especially the ones who feel a little insane, like me. Instant vibe check.</p>
-    </div>
-    <div class="interest-card">
-      <div class="emoji">✍️</div>
-      <h3>Poems & Letters</h3>
-      <p>Handwritten, heartfelt ones especially. I read them and I write my own too.</p>
-    </div>
-    <div class="interest-card">
-      <div class="emoji">🎸</div>
-      <h3>Guitar</h3>
-      <p>Don't own one yet, but I really want to.</p>
-    </div>
-  </div>
-</section>
 
-<section>
-  <h2 class="section-title">RAPID FIRE</h2>
-  <div class="qa-list">
-    <div class="qa-card">
-      <div class="q">Q: WHAT'S YOUR FAVORITE WAY TO WASTE TIME?</div>
-      <div class="a">Doomscrolling. No shame, just facts.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: SOMETHING YOU WANT TO START LEARNING?</div>
-      <div class="a">How to be more productive.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: COMFORT FOOD?</div>
-      <div class="a">Dahi bhalla. No contest.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: A WORD YOUR FRIENDS WOULD USE FOR YOU?</div>
-      <div class="a">Mad.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: WHAT ARE YOU MOST SCARED OF?</div>
-      <div class="a">Losing the people I love.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: MASTER OF ANYTHING FOR ONE DAY, WHAT WOULD IT BE?</div>
-      <div class="a">All the knowledge in the world, just handed to me.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: RANDOM CURRENT OBSESSION?</div>
-      <div class="a">Idk, so many things honestly.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: FAVORITE COLOR?</div>
-      <div class="a">I like every color, but if I have to be specific, red.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: WHAT DO YOU LISTEN TO?</div>
-      <div class="a">Everything, as long as it has vibe, I'm in.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: WHAT MATTERS MORE ACTIONS OR WORDS? </div>
-      <div class="a">Both but to be specific, actions.</div>
-    </div>
-    <div class="qa-card">
-      <div class="q">Q: WHAT ARE YOU INTROVERT OR EXTROVERT?</div>
-      <div class="a">Ambivert.</div>
-    </div>
-  </div>
-</section>
+<!-- =========================
+     WORK
+========================= -->
 
-<section>
-  <h2 class="section-title">FIND ME</h2>
-  <div class="find-grid">
-    <a class="find-card" href="mailto:mishika0749@gmail.com">
-      <span class="icon">📧</span>
-      <span>mishika0749@gmail.com<small>Gmail</small></span>
+<section
+    class="work reveal"
+    id="work"
+>
+
+
+    <div class="work-header">
+
+
+        <div>
+
+
+            <div class="label">
+                03 / WORK
+            </div>
+
+
+            <h2 class="work-title">
+
+                things
+
+                <br>
+
+                <em>
+                    I've made.
+                </em>
+
+            </h2>
+
+
+        </div>
+
+
+        <p class="work-intro">
+
+            A small collection of things I've built,
+            experimented with, or put together because
+            I wanted to see if I could.
+
+        </p>
+
+
+    </div>
+
+
+    <!-- PROJECT 01 -->
+
+    <a
+        class="project"
+        href="https://justmishchief.github.io/perfect-day-game/"
+        target="_blank"
+        rel="noopener"
+    >
+
+
+        <div class="project-no">
+            01
+        </div>
+
+
+        <div>
+
+
+            <div class="project-name">
+                My Perfect Day
+            </div>
+
+
+            <p class="project-description">
+
+                A small game made during a hackathon.
+                One of those projects that started with
+                an idea and ended with me learning a
+                bunch of things I didn't expect to learn.
+
+            </p>
+
+
+        </div>
+
+
+        <div class="project-meta">
+
+            <span>
+                game / hackathon
+            </span>
+
+            <span class="project-link">
+                visit ↗
+            </span>
+
+        </div>
+
+
     </a>
-    <a class="find-card" href="https://github.com/justmishchief" target="_blank" rel="noopener">
-      <span class="icon">🐙</span>
-      <span>justmishchief<small>GitHub</small></span>
+
+
+    <!-- PROJECT 02 -->
+
+    <a
+        class="project"
+        href="https://justmishchief.xyz/"
+        target="_blank"
+        rel="noopener"
+    >
+
+
+        <div class="project-no">
+            02
+        </div>
+
+
+        <div>
+
+
+            <div class="project-name">
+                This website
+            </div>
+
+
+            <p class="project-description">
+
+                A little corner of the internet that is
+                supposed to feel like me rather than a
+                standard portfolio template.
+
+            </p>
+
+
+        </div>
+
+
+        <div class="project-meta">
+
+            <span>
+                design / code
+            </span>
+
+            <span class="project-link">
+                you're here ↗
+            </span>
+
+        </div>
+
+
     </a>
-    <a class="find-card" href="https://www.linkedin.com/in/mishika-%E3%85%A4-73120b42a" target="_blank" rel="noopener">
-      <span class="icon">💼</span>
-      <span>Mishika<small>LinkedIn</small></span>
-    </a>
-    <div class="find-card">
-      <span class="icon">💬</span>
-      <span>U0BBNTHLJMR<small>Slack ID</small></span>
-    </div>
-  </div>
+
+
 </section>
+
+
+<!-- =========================
+     CURRENTLY
+========================= -->
+
+<section class="currently reveal">
+
+
+    <div class="currently-grid">
+
+
+        <div>
+
+
+            <div class="currently-label">
+                04 / CURRENTLY
+            </div>
+
+
+            <h2 class="currently-title">
+
+                still
+
+                <br>
+
+                <em>
+                    loading.
+                </em>
+
+            </h2>
+
+
+        </div>
+
+
+        <div class="currently-copy">
+
+
+            <p>
+
+                There isn't a perfectly polished answer
+                to what I'm doing right now.
+
+            </p>
+
+
+            <p>
+
+                I'm learning code, trying different things,
+                making small projects and occasionally
+                getting obsessed with something completely
+                unrelated.
+
+            </p>
+
+
+            <p>
+
+                <strong>
+
+                    Which is probably exactly where I
+                    should be right now.
+
+                </strong>
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section
+    class="contact reveal"
+    id="contact"
+>
+
+
+    <div class="contact-top">
+
+
+        <div class="label">
+            05 / CONTACT
+        </div>
+
+
+        <div
+            style="
+                font-family:var(--mono);
+                font-size:9px;
+                color:var(--muted);
+                text-transform:uppercase;
+            "
+        >
+
+            always open to a good conversation
+
+        </div>
+
+
+    </div>
+
+
+    <h2 class="contact-heading">
+
+        contact
+
+        <br>
+
+        <em>
+            me.
+        </em>
+
+    </h2>
+
+
+    <div class="contact-grid">
+
+
+        <p class="contact-note">
+
+            For questions, collaborations, ideas,
+            project conversations, or anything worth
+            talking about — you can find me here.
+
+        </p>
+
+
+        <div class="contact-links">
+
+
+            <!-- EMAIL -->
+
+            <a
+                class="contact-link"
+                href="mailto:mishika0749@gmail.com"
+            >
+
+                <span>
+                    Email
+                </span>
+
+                <span>
+                    mishika0749@gmail.com
+                </span>
+
+            </a>
+
+
+            <!-- GITHUB -->
+
+            <a
+                class="contact-link"
+                href="https://github.com/justmishchief"
+                target="_blank"
+                rel="noopener"
+            >
+
+                <span>
+                    GitHub
+                </span>
+
+                <span>
+                    justmishchief ↗
+                </span>
+
+            </a>
+
+
+            <!-- LINKEDIN -->
+
+            <a
+                class="contact-link"
+                href="https://www.linkedin.com/"
+                target="_blank"
+                rel="noopener"
+            >
+
+                <span>
+                    LinkedIn
+                </span>
+
+                <span>
+                    Mishika ↗
+                </span>
+
+            </a>
+
+
+            <!-- SLACK -->
+
+            <a
+                class="contact-link"
+                href="https://hackclub.enterprise.slack.com/team/U0BBNTHLJMR"
+                target="_blank"
+                rel="noopener"
+            >
+
+                <span>
+                    Slack
+                </span>
+
+                <span>
+                    U0BBNTHLJMR ↗
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
-  <div class="heart-line">MADE WITH ❤️ BY MISHIKA</div>
-  <div style="margin-top:10px;">there's a lot riding on these dreams, i hope, so hard, that they all come true.</div>
-  <div style="margin-top:10px; font-weight:700;">I'M NOT MUCH, BUT I AM ALL I HAVE.</div>
+
+
+    <span>
+        justmishchief
+    </span>
+
+
+    <span class="footer-love">
+
+        MADE WITH <b>♥</b> BY MISHIKA
+
+    </span>
+
+
+    <span>
+        somewhere on the internet
+    </span>
+
+
 </footer>
 
+
+</div>
+
+
 <script>
-// ---- pixel avatar: same grid + color technique from the hackathon game ----
-const canvas = document.getElementById('avatar');
-const ctx = canvas.getContext('2d');
 
-const colors = {
-  1: '#A6302A', // heart outline
-  2: '#E2574C', // heart fill
-  3: '#FFA79B', // heart highlight
-};
+/* =========================
+   DARK MODE
+========================= */
 
-// simple pixel heart, same grid+color technique as before
-const heart = [
-  [0,0,1,1,0,0,0,1,1,0,0],
-  [0,1,2,2,1,1,1,2,2,1,0],
-  [1,2,3,2,2,2,2,2,2,2,1],
-  [1,2,2,2,2,2,2,2,2,2,1],
-  [1,2,2,2,2,2,2,2,2,2,1],
-  [0,1,2,2,2,2,2,2,2,1,0],
-  [0,0,1,2,2,2,2,2,1,0,0],
-  [0,0,0,1,2,2,2,1,0,0,0],
-  [0,0,0,0,1,2,1,0,0,0,0],
-  [0,0,0,0,0,1,0,0,0,0,0],
+const themeToggle =
+    document.getElementById("themeToggle");
+
+const themeIcon =
+    themeToggle.querySelector(".theme-icon");
+
+
+const savedTheme =
+    localStorage.getItem("mishika-theme");
+
+
+if (savedTheme === "dark") {
+
+    document.body.classList.add("dark");
+
+    themeIcon.textContent = "○";
+
+}
+
+
+themeToggle.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark");
+
+
+    const isDark =
+        document.body.classList.contains("dark");
+
+
+    themeIcon.textContent =
+        isDark ? "○" : "◐";
+
+
+    localStorage.setItem(
+        "mishika-theme",
+        isDark ? "dark" : "light"
+    );
+
+});
+
+
+/* =========================
+   CUSTOM CURSOR
+========================= */
+
+const cursor =
+    document.querySelector(".cursor");
+
+
+window.addEventListener("mousemove", (e) => {
+
+    if (!cursor) return;
+
+    cursor.style.left =
+        e.clientX + "px";
+
+    cursor.style.top =
+        e.clientY + "px";
+
+});
+
+
+document
+    .querySelectorAll("a, button, .orbit-dot")
+    .forEach((el) => {
+
+        el.addEventListener(
+            "mouseenter",
+            () => {
+                cursor.classList.add("hover");
+            }
+        );
+
+
+        el.addEventListener(
+            "mouseleave",
+            () => {
+                cursor.classList.remove("hover");
+            }
+        );
+
+    });
+
+
+/* =========================
+   SCROLL REVEAL
+========================= */
+
+const revealElements =
+    document.querySelectorAll(".reveal");
+
+
+const revealObserver =
+    new IntersectionObserver(
+        (entries) => {
+
+            entries.forEach((entry) => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("show");
+
+                    revealObserver.unobserve(
+                        entry.target
+                    );
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+
+revealElements.forEach((el) => {
+
+    revealObserver.observe(el);
+
+});
+
+
+/* =========================
+   ORBIT / NICKNAMES
+========================= */
+
+const orbit =
+    document.getElementById("orbit");
+
+const orbitDot =
+    document.getElementById("orbitDot");
+
+const orbitText =
+    document.getElementById("orbitText");
+
+
+const nicknames = [
+
+    "mishika",
+    "mish",
+    "mishu",
+    "mishi",
+    "mishchief"
+
 ];
 
-function drawSprite(grid, offsetX, offsetY, scale) {
-  for (let row = 0; row < grid.length; row++) {
-    for (let col = 0; col < grid[row].length; col++) {
-      const code = grid[row][col];
-      if (code === 0) continue;
-      ctx.fillStyle = colors[code];
-      ctx.fillRect(offsetX + col*scale, offsetY + row*scale, scale, scale);
+
+let currentAngle = 0;
+
+let dragging = false;
+
+let lastAngle = 0;
+
+let accumulatedRotation = 0;
+
+
+/* GET POINTER ANGLE */
+
+function getAngle(event) {
+
+    const rect =
+        orbit.getBoundingClientRect();
+
+
+    const centerX =
+        rect.left + rect.width / 2;
+
+
+    const centerY =
+        rect.top + rect.height / 2;
+
+
+    const x =
+        event.clientX - centerX;
+
+
+    const y =
+        event.clientY - centerY;
+
+
+    return Math.atan2(y, x) * 180 / Math.PI;
+
+}
+
+
+/* ROTATE */
+
+function rotateOrbit(delta) {
+
+    currentAngle += delta;
+
+
+    const radians =
+        (currentAngle - 90) * Math.PI / 180;
+
+
+    orbitDot.style.left =
+        `calc(50% + ${Math.cos(radians) * 45}%)`;
+
+
+    orbitDot.style.top =
+        `calc(50% + ${Math.sin(radians) * 45}%)`;
+
+
+    accumulatedRotation += delta;
+
+
+    const index =
+        Math.floor(
+            Math.abs(accumulatedRotation) / 55
+        ) % nicknames.length;
+
+
+    orbitText.style.opacity = "0";
+
+
+    setTimeout(() => {
+
+        orbitText.textContent =
+            nicknames[index];
+
+        orbitText.style.opacity = "1";
+
+    }, 120);
+
+}
+
+
+/* POINTER DOWN */
+
+orbitDot.addEventListener(
+    "pointerdown",
+    (event) => {
+
+        dragging = true;
+
+        orbitDot.setPointerCapture(
+            event.pointerId
+        );
+
+        lastAngle =
+            getAngle(event);
+
     }
-  }
-}
+);
 
-function draw(){
-  ctx.clearRect(0,0,canvas.width, canvas.height);
-  const scale = 14;
-  drawSprite(heart, 15, 20, scale);
 
-  // shadow underneath
-  ctx.fillStyle = 'rgba(28,58,82,0.15)';
-  ctx.beginPath();
-  ctx.ellipse(90, 200, 50, 9, 0, 0, Math.PI*2);
-  ctx.fill();
-}
-draw();
-// heartbeat scaling is handled by the CSS animation on the canvas element,
-// so we just need to draw once, no animation loop needed here.
+/* POINTER MOVE */
+
+orbitDot.addEventListener(
+    "pointermove",
+    (event) => {
+
+        if (!dragging) return;
+
+
+        const newAngle =
+            getAngle(event);
+
+
+        let delta =
+            newAngle - lastAngle;
+
+
+        if (delta > 180) {
+            delta -= 360;
+        }
+
+
+        if (delta < -180) {
+            delta += 360;
+        }
+
+
+        rotateOrbit(delta);
+
+
+        lastAngle =
+            newAngle;
+
+    }
+);
+
+
+/* POINTER UP */
+
+orbitDot.addEventListener(
+    "pointerup",
+    () => {
+
+        dragging = false;
+
+    }
+);
+
+
+/* POINTER CANCEL */
+
+orbitDot.addEventListener(
+    "pointercancel",
+    () => {
+
+        dragging = false;
+
+    }
+);
+
+
+/* MOUSE / TRACKPAD */
+
+orbit.addEventListener(
+    "wheel",
+    (event) => {
+
+        event.preventDefault();
+
+
+        rotateOrbit(
+            event.deltaY > 0
+                ? 10
+                : -10
+        );
+
+    },
+    {
+        passive: false
+    }
+);
+
 </script>
+
+
 </body>
 </html>
