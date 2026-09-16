@@ -8,2278 +8,1333 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 
 <style>
-
-:root{
-    --paper:#ffffff;
-    --ink:#11110f;
-    --muted:#77746e;
-    --line:#d9d8d3;
-    --red:#ff3156;
-
-    --mono:"DM Mono",monospace;
-    --sans:"Manrope",sans-serif;
-    --serif:"Instrument Serif",serif;
-}
-
+/* =========================================================
+   RESET & VARIABLES
+========================================================= */
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
 html{
-    scroll-behavior:smooth;
+  scroll-behavior:smooth;
 }
 
 body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--sans);
-    transition:
-        background .35s ease,
-        color .35s ease;
-}
-
-body.dark{
-    --paper:#10100f;
-    --ink:#f4f2ec;
-    --muted:#85837d;
-    --line:#33322f;
+  overflow-x:hidden;
+  background:#10104a;
+  color:#fff;
+  font-family:'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+  transition:background .4s ease, color .4s ease;
 }
 
 a{
-    color:inherit;
-    text-decoration:none;
+  color:inherit;
+  text-decoration:none;
 }
 
 button{
-    font:inherit;
+  font:inherit;
 }
 
-::selection{
-    background:var(--red);
-    color:#fff;
+:root{
+  --bg:#10104a;
+  --bg-deep:#0c0c38;
+  --blue:#3736c9;
+  --electric:#5957e8;
+  --purple:#7049d7;
+  --pink:#dc35bf;
+  --white:#fff;
+  --text:#fff;
+  --muted:#aaa9c9;
+  --soft:#d7d5eb;
 }
 
-
-/* =========================
-   PAGE
-========================= */
-
+/* =========================================================
+   BACKGROUND & GLOWS
+========================================================= */
 .page{
-    width:100%;
-    max-width:1500px;
-    margin:auto;
-    padding:0 42px;
+  position:relative;
+  min-height:100vh;
+  overflow:hidden;
+  background:
+    radial-gradient(700px 550px at 5% 0%, rgba(91,88,230,.32), transparent 70%),
+    radial-gradient(650px 500px at 100% 22%, rgba(218,52,194,.14), transparent 68%),
+    linear-gradient(180deg, #11104b 0%, #171658 48%, #241465 100%);
+  transition:background .4s ease;
 }
 
-
-/* =========================
-   CURSOR
-========================= */
-
-.cursor{
-    position:fixed;
-    width:28px;
-    height:28px;
-    border:1px solid var(--red);
-    border-radius:50%;
-    pointer-events:none;
-    z-index:9999;
-
-    transform:
-        translate(-50%,-50%)
-        rotate(45deg);
-
-    transition:
-        width .2s ease,
-        height .2s ease,
-        background .2s ease,
-        transform .2s ease;
-
-    mix-blend-mode:difference;
+.glow{
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  filter:blur(110px);
+  opacity:.22;
 }
 
-.cursor::before,
-.cursor::after{
-    content:"";
-    position:absolute;
-    background:var(--red);
+.glow-a{ width:440px; height:440px; left:-230px; top:22%; background:#5754e8; }
+.glow-b{ width:480px; height:480px; right:-260px; top:48%; background:#d72bc0; }
+.glow-c{ width:450px; height:450px; left:30%; top:82%; background:#4d42ce; }
+
+.grain{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  pointer-events:none;
+  opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
-.cursor::before{
-    width:1px;
-    height:42px;
-    left:50%;
-    top:-8px;
+/* =========================================================
+   NAV
+========================================================= */
+.nav{
+  position:fixed;
+  z-index:100;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(1120px, calc(100% - 28px));
+  height:64px;
+  padding:7px 9px 7px 21px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:22px;
+  background:rgba(17,16,70,.75);
+  backdrop-filter:blur(24px);
+  box-shadow:0 18px 70px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.08);
+  transition:all .3s ease;
 }
 
-.cursor::after{
-    width:42px;
-    height:1px;
-    left:-8px;
-    top:50%;
+.logo{
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:-0.5px;
 }
 
-.cursor.hover{
-    width:42px;
-    height:42px;
-    background:var(--red);
-    transform:
-        translate(-50%,-50%)
-        rotate(45deg)
-        scale(.8);
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
 
-
-/* =========================
-   NAVIGATION
-========================= */
-
-.topbar{
-    min-height:82px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    border-bottom:1px solid var(--line);
+.nav-links a, .mode{
+  padding:10px 16px;
+  border:0;
+  border-radius:13px;
+  background:transparent;
+  color:#c9c8e3;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .25s ease;
 }
 
-.top-left{
-    display:flex;
-    align-items:center;
-    gap:12px;
+.nav-links a:hover{
+  color:#fff;
+  background:rgba(255,255,255,.09);
 }
 
-.mark{
-    width:25px;
-    height:25px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border:1px solid var(--ink);
-
-    font-family:var(--mono);
-    font-size:10px;
+.mode{
+  background:#fff;
+  color:#151241;
+  font-weight:900;
 }
 
-.top-left span{
-    font-family:var(--mono);
-    font-size:9px;
-    letter-spacing:.05em;
+.mode:hover{
+  transform:translateY(-1px);
 }
 
-.top-right{
-    display:flex;
-    align-items:center;
-    gap:25px;
-
-    font-family:var(--mono);
-    font-size:9px;
-    text-transform:uppercase;
-}
-
-.top-right a{
-    position:relative;
-}
-
-.top-right a::after{
-    content:"";
-    position:absolute;
-    left:0;
-    bottom:-5px;
-
-    width:0;
-    height:1px;
-
-    background:var(--red);
-
-    transition:width .25s ease;
-}
-
-.top-right a:hover::after{
-    width:100%;
-}
-
-.theme-toggle{
-    display:flex;
-    align-items:center;
-    gap:8px;
-
-    border:0;
-    background:none;
-    color:var(--ink);
-
-    cursor:pointer;
-    text-transform:uppercase;
-}
-
-.theme-icon{
-    width:23px;
-    height:23px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border:1px solid var(--line);
-    border-radius:50%;
-
-    font-size:12px;
-}
-
-
-/* =========================
+/* =========================================================
    HERO
-========================= */
-
+========================================================= */
 .hero{
-    min-height:850px;
-
-    display:grid;
-    grid-template-columns:
-        100px
-        minmax(400px,1fr)
-        430px;
-
-    align-items:center;
-
-    gap:40px;
-    padding:90px 0 100px;
-
-    border-bottom:1px solid var(--line);
+  min-height:100vh;
+  padding:155px 24px 100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
 }
 
-.hero-small{
-    align-self:start;
-    padding-top:12px;
-
-    font-family:var(--mono);
-    font-size:8px;
-    color:var(--muted);
-
-    text-transform:uppercase;
-    writing-mode:vertical-rl;
-    transform:rotate(180deg);
+.hero-inner{
+  width:min(1250px,100%);
+  position:relative;
+  text-align:center;
 }
 
 .eyebrow{
-    margin-bottom:22px;
-
-    font-family:var(--mono);
-    font-size:9px;
-    color:var(--muted);
-
-    text-transform:uppercase;
-    letter-spacing:.08em;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:28px;
+  padding:8px 15px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  color:#d0ceee;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
 
-.hero-name{
-    font-size:
-        clamp(100px,13vw,205px);
-
-    line-height:.82;
-    letter-spacing:-.09em;
-    font-weight:500;
+.live-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#79e9a7;
+  box-shadow:0 0 12px rgba(121,233,167,.8);
 }
 
-.hero-note{
-    max-width:420px;
-
-    margin-top:55px;
-
-    font-family:var(--mono);
-    font-size:10px;
-    line-height:1.8;
-
-    color:var(--muted);
+.hero-title{
+  position:relative;
+  z-index:3;
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:clamp(65px, 12.8vw, 150px);
+  line-height:0.92;
+  letter-spacing:-0.035em;
+  font-weight:800;
+  text-transform:lowercase;
 }
 
-.hero-note strong{
-    color:var(--ink);
-    font-weight:500;
+.hero-title .line{
+  display:block;
 }
 
-
-/* =========================
-   ORBIT
-========================= */
-
-.hero-right{
-    height:500px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.hero-title .shine{
+  display:inline-block;
+  background:linear-gradient(105deg, #ffffff 10%, #e2dfff 35%, #b4abff 58%, #ff6ee8 82%, #ffffff 98%);
+  background-size:240% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:titleShine 8s ease-in-out infinite;
+  text-shadow: 0 10px 40px rgba(180, 171, 255, 0.25);
 }
 
-.orbit-wrap{
-    position:relative;
-
-    width:100%;
-    max-width:430px;
-    aspect-ratio:1;
+@keyframes titleShine{
+  0%,100%{ background-position:0% center; }
+  50%{ background-position:100% center; }
 }
 
-.orbit{
-    position:absolute;
-
-    width:min(390px,100%);
-    aspect-ratio:1;
-
-    top:50%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    border:1px solid var(--line);
-    border-radius:50%;
+.hero-punchword{
+  margin:32px auto 0;
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:clamp(16px, 2.8vw, 28px);
+  font-weight:800;
+  letter-spacing:6px;
+  color:#ffffff;
+  text-transform:uppercase;
 }
 
-.orbit::before{
-    content:"";
-
-    position:absolute;
-
-    inset:17%;
-
-    border:1px dashed var(--line);
-    border-radius:50%;
+.hero-actions{
+  margin-top:34px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
-.orbit-center{
-    position:absolute;
-
-    width:125px;
-    height:125px;
-
-    left:50%;
-    top:50%;
-
-    transform:translate(-50%,-50%);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:var(--red);
-    color:#fff;
-
-    border-radius:50%;
-
-    font-family:var(--serif);
-    font-size:34px;
-    font-style:italic;
-
-    transition:
-        background .35s ease,
-        transform .3s ease;
+.hero-btn{
+  min-width:145px;
+  padding:14px 22px;
+  border-radius:14px;
+  font-size:12px;
+  font-weight:800;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1), background .3s ease;
 }
 
-.orbit-center:hover{
-    transform:
-        translate(-50%,-50%)
-        scale(1.05);
+.hero-btn.primary{
+  color:#151241;
+  background:#fff;
+  box-shadow:0 12px 35px rgba(0,0,0,.22);
 }
 
-.orbit-center-text{
-    transition:opacity .12s ease;
+.hero-btn.secondary{
+  color:#fff;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.18);
 }
 
-.orbit-dot{
-    position:absolute;
-
-    width:15px;
-    height:15px;
-
-    left:50%;
-    top:5%;
-
-    transform:translate(-50%,-50%);
-
-    border-radius:50%;
-
-    background:var(--ink);
-
-    cursor:grab;
-
-    touch-action:none;
-
-    z-index:5;
+.hero-btn:hover{
+  transform:translateY(-4px);
 }
 
-.orbit-dot:active{
-    cursor:grabbing;
+/* HERO OBJECTS */
+.hero-object{
+  position:absolute;
+  z-index:2;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(22,21,78,.75);
+  backdrop-filter:blur(18px);
+  box-shadow:0 25px 70px rgba(0,0,0,.25);
+  pointer-events:none;
 }
 
-.orbit-instruction{
-    position:absolute;
-
-    top:3%;
-    right:-7%;
-
-    width:150px;
-
-    font-family:var(--mono);
-    font-size:9px;
-    line-height:1.5;
-
-    color:var(--muted);
-    text-transform:uppercase;
+.profile-object{
+  width:210px;
+  left:3%;
+  top:22%;
+  padding:18px;
+  border-radius:24px;
+  text-align:left;
+  transform:rotate(-7deg);
+  animation:profileFloat 6s ease-in-out infinite;
 }
 
-.orbit-instruction::before{
-    content:"";
-
-    position:absolute;
-
-    width:45px;
-    height:1px;
-
-    left:-55px;
-    top:50%;
-
-    background:var(--line);
+@keyframes profileFloat{
+  0%,100%{ transform:rotate(-7deg) translateY(0); }
+  50%{ transform:rotate(-5deg) translateY(-12px); }
 }
 
-.orbit-instruction::after{
-    content:"";
+.profile-top{ display:flex; align-items:center; gap:11px; }
 
-    position:absolute;
-
-    width:5px;
-    height:5px;
-
-    left:-61px;
-    top:calc(50% - 2px);
-
-    border-radius:50%;
-
-    background:var(--red);
+.profile-avatar{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:linear-gradient(135deg, #6966ee, #d936bc);
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:17px;
+  font-weight:800;
 }
 
+.profile-name{ font-size:14px; font-weight:800; }
+.profile-handle{ margin-top:3px; color:#9c9bc1; font-size:10px; }
+.profile-rule{ height:1px; margin:14px 0; background:rgba(255,255,255,.1); }
 
-/* =========================
-   INTRO
-========================= */
-
-.intro{
-    min-height:620px;
-
-    display:grid;
-    grid-template-columns:150px 1fr;
-
-    gap:70px;
-
-    padding:150px 0;
-
-    border-bottom:1px solid var(--line);
+.profile-tag{
+  display:inline-block;
+  margin:2px 2px 2px 0;
+  padding:6px 8px;
+  border-radius:8px;
+  background:rgba(255,255,255,.08);
+  color:#d2d0eb;
+  font-size:9px;
+  font-weight:600;
+  text-transform:lowercase;
 }
 
-.section-number,
-.label,
-.currently-label{
-    font-family:var(--mono);
-    font-size:9px;
-
-    color:var(--muted);
-
-    text-transform:uppercase;
+.code-object{
+  width:245px;
+  right:4%;
+  top:23%;
+  overflow:hidden;
+  border-radius:21px;
+  transform:rotate(6deg);
+  animation:codeFloat 7s ease-in-out infinite;
 }
 
-.intro-text{
-    max-width:1000px;
-
-    font-size:
-        clamp(42px,6.1vw,91px);
-
-    line-height:.98;
-    letter-spacing:-.055em;
+@keyframes codeFloat{
+  0%,100%{ transform:rotate(6deg) translateY(0); }
+  50%{ transform:rotate(4deg) translateY(-14px); }
 }
 
-.intro-text .quiet{
-    color:var(--muted);
+.window-bar{
+  height:30px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:0 12px;
+  background:#1e1e26;
 }
 
-.intro-text .serif{
-    font-family:var(--serif);
-    font-style:italic;
-    color:var(--red);
+.window-dot{ width:6px; height:6px; border-radius:50%; background:#686675; }
+
+.code-body{
+  padding:16px;
+  background:#121217;
+  text-align:left;
+  font:10px/1.8 monospace;
+  color:#9a99b4;
 }
 
+.c-pink{ color:#ec57cc; }
+.c-blue{ color:#7d7bff; }
+.c-white{ color:#f0eff8; }
 
-/* =========================
-   ABOUT
-========================= */
-
-.about{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-
-    border-bottom:1px solid var(--line);
+/* =========================================================
+   SECTIONS & ABOUT
+========================================================= */
+.section{
+  position:relative;
+  padding:90px 22px;
 }
 
-.about-block{
-    padding:125px 55px 125px 0;
+.section-inner{
+  width:min(1240px,100%);
+  margin:auto;
 }
 
-.about-block + .about-block{
-    padding-left:55px;
-    border-left:1px solid var(--line);
+.section-label{
+  margin-bottom:20px;
+  color:#aaa9ca;
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
 
-.about-big{
-    margin-top:80px;
-
-    max-width:600px;
-
-    font-size:
-        clamp(42px,5vw,72px);
-
-    line-height:.98;
-    letter-spacing:-.05em;
+.about-box{
+  min-height:700px;
+  position:relative;
+  overflow:hidden;
+  padding:76px;
+  border-radius:54px;
+  background:
+    radial-gradient(500px 450px at 88% 15%, rgba(232,57,196,.55), transparent 70%),
+    radial-gradient(500px 500px at 7% 100%, rgba(74,77,223,.65), transparent 72%),
+    linear-gradient(135deg, #4141ca, #5941d0 55%, #713dca);
+  box-shadow:0 45px 110px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
-.about-big em{
-    font-family:var(--serif);
-    color:var(--red);
+.about-box:before{
+  content:"";
+  position:absolute;
+  inset:16px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:40px;
+  pointer-events:none;
+}
+
+.about-content{
+  position:relative;
+  z-index:2;
+  max-width:620px;
+}
+
+.about-title{
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:clamp(46px, 6.8vw, 92px);
+  line-height:.88;
+  letter-spacing:-0.035em;
+  font-weight:800;
 }
 
 .about-copy{
-    margin-top:80px;
-
-    max-width:470px;
-
-    font-size:14px;
-    line-height:1.8;
-    color:var(--muted);
+  max-width:540px;
+  margin-top:30px;
+  color:#f2f1ff;
+  font-size:16px;
+  line-height:1.75;
 }
 
-.about-copy p{
-    margin-bottom:28px;
+.about-copy p + p{
+  margin-top:16px;
 }
 
+.about-window{
+  position:absolute;
+  right:6%;
+  bottom:8%;
+  width:380px;
+  overflow:hidden;
+  border-radius:28px;
+  background:#15151c;
+  box-shadow:0 40px 90px rgba(13,10,60,.45);
+  transform:rotate(-4deg);
+  transition:transform .4s ease;
+}
 
-/* =========================
+.about-window:hover{
+  transform:rotate(-2deg) translateY(-8px);
+}
+
+.window-header{
+  height:42px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:0 15px;
+  border-bottom:1px solid #282833;
+}
+
+.about-window-body{ padding:24px; }
+
+.about-avatar{
+  width:65px;
+  height:65px;
+  display:grid;
+  place-items:center;
+  border-radius:20px;
+  background:linear-gradient(135deg, #6462ed, #df38bf);
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:24px;
+  font-weight:800;
+}
+
+.about-name{ margin-top:14px; font-size:20px; font-weight:800; }
+.about-handle{ margin-top:3px; color:#878696; font-size:11px; }
+
+.about-mini-copy{
+  max-width:290px;
+  margin-top:17px;
+  color:#b7b6c5;
+  font-size:13px;
+  line-height:1.65;
+}
+
+.about-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:18px; }
+
+.about-tag{
+  padding:7px 10px;
+  border-radius:9px;
+  background:#23232c;
+  color:#cfcedd;
+  font-size:10px;
+  font-weight:600;
+}
+
+/* =========================================================
    WORK
-========================= */
+========================================================= */
+.work{ padding-top:120px; }
 
-.work{
-    padding:150px 0;
-
-    border-bottom:1px solid var(--line);
-}
-
-.work-header{
-    display:grid;
-    grid-template-columns:1fr 350px;
-
-    gap:60px;
-
-    margin-bottom:110px;
+.work-intro{
+  margin-bottom:48px;
 }
 
 .work-title{
-    margin-top:65px;
-
-    font-size:
-        clamp(75px,10vw,150px);
-
-    line-height:.82;
-    letter-spacing:-.08em;
-    font-weight:500;
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:clamp(46px, 6.8vw, 94px);
+  line-height:.9;
+  letter-spacing:-0.035em;
+  font-weight:800;
 }
 
-.work-title em{
-    font-family:var(--serif);
-    color:var(--red);
-    font-weight:400;
+.work-stage{
+  min-height:720px;
+  position:relative;
+  overflow:hidden;
+  border-radius:54px;
+  background:
+    radial-gradient(500px 400px at 72% 20%, rgba(225,49,193,.53), transparent 68%),
+    radial-gradient(550px 500px at 17% 85%, rgba(70,71,220,.7), transparent 72%),
+    linear-gradient(135deg, #2727a0, #3737c9 48%, #6b3dca);
+  box-shadow:0 45px 110px rgba(0,0,0,.25);
 }
 
-.work-intro{
-    align-self:end;
+.work-heading{
+  position:absolute;
+  z-index:5;
+  top:60px;
+  left:60px;
+}
 
-    font-family:var(--mono);
-    font-size:10px;
-    line-height:1.8;
-
-    color:var(--muted);
+.work-heading h3{
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:clamp(38px, 5.2vw, 72px);
+  line-height:.9;
+  letter-spacing:-0.035em;
+  font-weight:800;
 }
 
 .project{
-    display:grid;
-
-    grid-template-columns:70px 1fr 200px;
-
-    gap:30px;
-
-    padding:45px 0;
-
-    border-top:1px solid var(--line);
-
-    transition:
-        padding .3s ease;
-}
-
-.project:last-child{
-    border-bottom:1px solid var(--line);
+  position:absolute;
+  z-index:4;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:25px;
+  background:#14141a;
+  box-shadow:0 35px 80px rgba(9,8,48,.45);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s;
 }
 
 .project:hover{
-    padding-left:15px;
-    padding-right:15px;
+  z-index:8;
+  box-shadow:0 45px 100px rgba(8,7,44,.55);
 }
 
-.project-no{
-    font-family:var(--mono);
-    font-size:9px;
-    color:var(--muted);
+.project-one{
+  width:550px;
+  left:8%;
+  bottom:8%;
+  transform:rotate(-4deg);
 }
 
-.project-name{
-    font-size:clamp(30px,4vw,62px);
-    letter-spacing:-.05em;
+.project-one:hover{ transform:rotate(-2deg) translateY(-8px); }
+
+.project-two{
+  width:380px;
+  right:7%;
+  top:28%;
+  transform:rotate(6deg);
 }
 
-.project-description{
-    max-width:540px;
+.project-two:hover{ transform:rotate(3deg) translateY(-8px); }
 
-    margin-top:20px;
+.project-body{ padding:23px; }
+.project-title-row{ display:flex; justify-content:space-between; align-items:center; }
+.project-name{ font-size:16px; font-weight:800; }
+.project-arrow{ width:30px; height:30px; display:grid; place-items:center; border-radius:10px; background:#252530; }
 
-    font-family:var(--mono);
-    font-size:10px;
-    line-height:1.8;
-
-    color:var(--muted);
+.project-preview{
+  height:210px;
+  position:relative;
+  overflow:hidden;
+  margin-top:18px;
+  border-radius:17px;
+  background:radial-gradient(circle at 72% 17%, #e73ac4, transparent 21%), linear-gradient(135deg, #3735bb, #1b1a5e);
 }
 
-.project-meta{
-    display:flex;
-    flex-direction:column;
-
-    justify-self:end;
-
-    gap:12px;
-
-    text-align:right;
-
-    font-family:var(--mono);
-    font-size:8px;
-
-    color:var(--muted);
-    text-transform:uppercase;
+.project-preview-text{
+  position:absolute;
+  z-index:2;
+  left:23px;
+  bottom:20px;
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-size:32px;
+  line-height:.92;
+  letter-spacing:-0.5px;
+  font-weight:800;
 }
 
-.project-link{
-    color:var(--ink);
+.game-preview{
+  height:170px;
+  position:relative;
+  overflow:hidden;
+  margin-top:17px;
+  border-radius:17px;
+  background:linear-gradient(135deg, #dcb9d7, #7672df);
 }
 
+.game-sun{ position:absolute; width:60px; height:60px; right:30px; top:20px; border-radius:50%; background:#fff0cf; }
+.game-mountain{ position:absolute; width:220px; height:130px; left:20px; bottom:-70px; transform:rotate(45deg); background:#3937a5; }
 
-/* =========================
-   CURRENTLY
-========================= */
+/* =========================================================
+   CONTACT / INTERNET
+========================================================= */
+.internet{ padding-top:120px; }
 
-.currently{
-    padding:150px 0;
-
-    border-bottom:1px solid var(--line);
+.internet-box{
+  min-height:730px;
+  position:relative;
+  overflow:hidden;
+  padding:72px;
+  border-radius:54px;
+  background:
+    radial-gradient(430px 430px at 76% 53%, rgba(82,79,221,.26), transparent 72%),
+    radial-gradient(400px 350px at 91% 92%, rgba(213,47,191,.27), transparent 70%),
+    #19184e;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 45px 110px rgba(0,0,0,.2);
 }
 
-.currently-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-
-    gap:100px;
+.internet-box:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:60px 60px;
+  opacity:.35;
 }
 
-.currently-label{
-    margin-bottom:75px;
+.find-header{ position:relative; z-index:6; max-width:540px; }
+.find-header h2{ font-family:'Bricolage Grotesque', sans-serif; font-size:clamp(46px, 6.5vw, 88px); line-height:.88; letter-spacing:-0.035em; font-weight:800; }
+.find-sub{ margin-top:20px; color:#b1b0cf; font-size:14px; line-height:1.6; }
+
+.find-network{
+  position:absolute;
+  z-index:3;
+  top:50%;
+  right:5%;
+  width:540px;
+  height:480px;
+  transform:translateY(-45%);
 }
 
-.currently-title{
-    font-size:
-        clamp(90px,13vw,190px);
+.find-ring{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid rgba(128,125,238,.2);
+  pointer-events:none;
+}
+.find-ring.r1{ width:250px; height:250px; }
+.find-ring.r2{ width:370px; height:370px; border-color:rgba(219,71,199,.15); }
+.find-ring.r3{ width:480px; height:480px; border-color:rgba(128,125,238,.1); }
 
-    line-height:.75;
-    letter-spacing:-.09em;
-    font-weight:500;
+.find-core{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:125px;
+  height:125px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  border-radius:36px;
+  background:radial-gradient(circle at 35% 25%, #7976f1, #4b46c6 58%, #30277e);
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 0 80px rgba(91,86,226,.45), 0 25px 65px rgba(0,0,0,.3);
+  animation:coreBreath 5s ease-in-out infinite;
 }
 
-.currently-title em{
-    font-family:var(--serif);
-    color:var(--red);
-    font-weight:400;
+@keyframes coreBreath{
+  0%,100%{ transform:translate(-50%,-50%) rotate(-2deg); }
+  50%{ transform:translate(-50%,-53%) rotate(2deg); }
 }
 
-.currently-copy{
-    max-width:450px;
+.core-symbol{ font-size:18px; margin-bottom:6px; }
+.core-name{ font-family:'Bricolage Grotesque', sans-serif; font-size:13px; font-weight:800; letter-spacing:1px; }
+.core-small{ margin-top:3px; color:#d2d0f3; font-size:9px; }
 
-    align-self:end;
-
-    font-size:14px;
-    line-height:1.9;
-
-    color:var(--muted);
+.find-card{
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:160px;
+  padding:12px 16px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+  backdrop-filter:blur(17px);
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
+  transition:all .35s ease;
 }
 
-.currently-copy p{
-    margin-bottom:30px;
+.find-card:hover{
+  z-index:10;
+  transform:translateY(-8px) scale(1.035) rotate(0deg) !important;
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.3);
 }
 
-.currently-copy strong{
-    color:var(--ink);
-    font-weight:600;
+.find-icon{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.1);
+  color:#e7e6f5;
+  font-size:13px;
 }
 
-
-/* =========================
-   CONTACT
-========================= */
-
-.contact{
-    padding:150px 0 80px;
+.find-card strong{
+  display:block;
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:-0.2px;
 }
 
-.contact-top{
-    display:flex;
-    justify-content:space-between;
+.card-github{ left:8%; top:8%; transform:rotate(-5deg); }
+.card-discord{ right:2%; top:16%; transform:rotate(5deg); }
+.card-instagram{ left:1%; bottom:16%; transform:rotate(4deg); }
+.card-x{ right:4%; bottom:12%; transform:rotate(-5deg); }
+.card-reddit{ left:30%; bottom:1%; transform:rotate(4deg); }
+.card-slack{ right:28%; top:2%; transform:rotate(-3deg); }
 
-    align-items:flex-start;
+/* =========================================================
+   MINDSET & FOOTER
+========================================================= */
+.mindset{ padding:160px 24px; }
+.mindset-inner{ width:min(1100px,100%); margin:auto; text-align:center; }
+.mindset-symbol{ width:54px; height:54px; margin:0 auto 26px; display:grid; place-items:center; border-radius:16px; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.06); font-size:16px; }
+.mindset h2{ font-family:'Bricolage Grotesque', sans-serif; font-size:clamp(38px, 6.8vw, 90px); line-height:.92; letter-spacing:-0.035em; font-weight:800; }
+.mindset p{ margin-top:24px; color:#9594be; font-family:'Bricolage Grotesque', sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; }
+
+.footer{ padding:50px 22px 25px; }
+.footer-box{
+  min-height:480px;
+  position:relative;
+  overflow:hidden;
+  padding:65px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  border-radius:54px 54px 28px 28px;
+  background:radial-gradient(500px 400px at 84% 12%, rgba(235,62,201,.7), transparent 68%), linear-gradient(135deg, #4140ce, #703dce);
+  box-shadow:0 45px 110px rgba(0,0,0,.22);
 }
 
-.contact-heading{
-    margin-top:70px;
+.footer h2{ font-family:'Bricolage Grotesque', sans-serif; position:relative; z-index:2; font-size:clamp(55px, 9.5vw, 130px); line-height:.84; letter-spacing:-0.04em; font-weight:800; }
+.footer-bottom{ position:relative; z-index:2; color:#e3e2fa; font-size:14px; line-height:1.6; }
+.credits{ padding:22px 0 5px; text-align:center; color:#908fad; font-family:'Bricolage Grotesque', sans-serif; font-size:11px; letter-spacing:1.5px; font-weight:700; }
 
-    font-size:
-        clamp(100px,15vw,220px);
+/* REVEAL */
+.reveal{ opacity:0; transform:translateY(35px); transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+.reveal.visible{ opacity:1; transform:translateY(0); }
 
-    line-height:.75;
-    letter-spacing:-.1em;
-    font-weight:500;
+/* =========================================================
+   LIGHT MODE PALETTE
+========================================================= */
+body.light{
+  background:#f4f3fa;
+  color:#120e36;
 }
 
-.contact-heading em{
-    font-family:var(--serif);
-    color:var(--red);
-    font-weight:400;
+body.light .page{
+  background:
+    radial-gradient(700px 550px at 4% 0%, rgba(95, 83, 235, 0.12), transparent 70%),
+    radial-gradient(650px 500px at 100% 20%, rgba(220, 53, 191, 0.10), transparent 68%),
+    linear-gradient(180deg, #f8f7fc 0%, #f0eefa 52%, #eae6f7 100%);
 }
 
-.contact-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-
-    gap:100px;
-
-    margin-top:120px;
-
-    padding-top:35px;
-
-    border-top:1px solid var(--line);
+body.light .nav{
+  background:rgba(255, 255, 255, 0.88);
+  border:1px solid #ddd9ec;
+  box-shadow:0 14px 45px rgba(26, 17, 74, 0.08);
 }
 
-.contact-note{
-    max-width:400px;
-
-    font-family:var(--mono);
-    font-size:10px;
-    line-height:1.8;
-
-    color:var(--muted);
+body.light .logo{
+  color:#151241;
 }
 
-.contact-links{
-    width:100%;
-    max-width:600px;
-    justify-self:end;
+body.light .nav-links a{
+  color:#4c4573;
 }
 
-.contact-link{
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:30px;
-
-    padding:18px 0;
-
-    border-bottom:1px solid var(--line);
-
-    font-family:var(--mono);
-    font-size:10px;
-
-    transition:
-        color .2s ease,
-        padding .2s ease;
+body.light .nav-links a:hover{
+  color:#151241;
+  background:#eeebf8;
 }
 
-.contact-link:hover{
-    color:var(--red);
-    padding-left:10px;
+body.light .mode{
+  background:#1a144e;
+  color:#ffffff;
 }
 
-.contact-link span:first-child{
-    text-transform:uppercase;
-    color:var(--muted);
+body.light .eyebrow{
+  color:#3a326c;
+  background:#ffffff;
+  border-color:#d7d2ea;
+  box-shadow:0 4px 18px rgba(35, 24, 95, 0.06);
 }
 
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-    display:flex;
-
-    justify-content:space-between;
-    align-items:center;
-
-    padding:35px 0 30px;
-
-    font-family:var(--mono);
-    font-size:8px;
-
-    color:var(--muted);
-
-    text-transform:uppercase;
-    letter-spacing:.06em;
+body.light .hero-title .shine{
+  background:linear-gradient(100deg, #120e36 10%, #3a3286 42%, #7529b5 72%, #120e36 96%);
+  background-size:240% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:none;
 }
 
-.footer-love{
-    color:var(--ink);
+body.light .hero-punchword{
+  color:#171142;
 }
 
-.footer-love b{
-    color:var(--red);
-    font-size:11px;
+body.light .hero-btn.primary{
+  background:#1d1656;
+  color:#ffffff;
+  box-shadow:0 12px 30px rgba(29, 22, 86, 0.25);
 }
 
-
-/* =========================
-   REVEAL
-========================= */
-
-.reveal{
-    opacity:0;
-
-    transform:translateY(28px);
-
-    transition:
-        opacity .8s ease,
-        transform .8s ease;
+body.light .hero-btn.secondary{
+  color:#231a5e;
+  background:#ffffff;
+  border-color:#d3ceec;
 }
 
-.reveal.show{
-    opacity:1;
-    transform:translateY(0);
+body.light .hero-btn.secondary:hover{
+  background:#f1effa;
 }
 
-
-/* =========================
-   TABLET / MOBILE
-========================= */
-
-@media(max-width:800px){
-
-    .page{
-        padding:0 20px;
-    }
-
-    .topbar{
-        min-height:68px;
-    }
-
-    .top-left span{
-        display:block;
-        font-size:8px;
-    }
-
-    .top-right{
-        gap:13px;
-        font-size:8px;
-    }
-
-    .theme-toggle{
-        font-size:8px;
-    }
-
-    .theme-icon{
-        width:21px;
-        height:21px;
-    }
-
-
-    /* HERO */
-
-    .hero{
-        min-height:auto;
-
-        grid-template-columns:1fr;
-
-        padding:90px 0 70px;
-    }
-
-    .hero-small{
-        position:static;
-
-        text-align:right;
-
-        margin-bottom:45px;
-
-        writing-mode:initial;
-        transform:none;
-    }
-
-    .hero-name{
-        font-size:22vw;
-        letter-spacing:-.08em;
-    }
-
-    .hero-note{
-        margin-top:58px;
-        font-size:12px;
-    }
-
-
-    /* ORBIT */
-
-    .hero-right{
-        height:390px;
-
-        margin-top:35px;
-    }
-
-    .orbit-wrap{
-        width:100%;
-    }
-
-    .orbit{
-        width:min(330px,82vw);
-    }
-
-    .orbit-center{
-        width:100px;
-        height:100px;
-
-        font-size:27px;
-    }
-
-    .orbit-instruction{
-        top:-5px;
-        right:3px;
-
-        width:125px;
-
-        font-size:14px;
-    }
-
-    .orbit-instruction::before{
-        width:28px;
-        left:-36px;
-    }
-
-    .orbit-instruction::after{
-        left:-46px;
-    }
-
-
-    /* INTRO */
-
-    .intro{
-        padding:100px 0;
-
-        grid-template-columns:1fr;
-
-        gap:25px;
-    }
-
-    .intro-text{
-        font-size:11vw;
-    }
-
-
-    /* ABOUT */
-
-    .about{
-        grid-template-columns:1fr;
-    }
-
-    .about-block,
-    .about-block + .about-block{
-        padding:65px 0;
-    }
-
-    .about-block + .about-block{
-        border-left:0;
-
-        border-top:1px solid var(--line);
-    }
-
-
-    /* WORK */
-
-    .work{
-        padding:100px 0;
-    }
-
-    .work-header{
-        grid-template-columns:1fr;
-    }
-
-    .work-intro{
-        justify-self:start;
-
-        margin-top:45px;
-    }
-
-    .project{
-        grid-template-columns:40px 1fr;
-
-        gap:10px;
-    }
-
-    .project-meta{
-        grid-column:2;
-
-        justify-self:start;
-
-        flex-direction:row;
-
-        gap:30px;
-
-        margin-top:30px;
-
-        text-align:left;
-    }
-
-
-    /* CURRENTLY */
-
-    .currently{
-        padding:100px 0;
-    }
-
-    .currently-grid{
-        grid-template-columns:1fr;
-
-        gap:65px;
-    }
-
-    .currently-label{
-        margin-bottom:45px;
-    }
-
-    .currently-title{
-        font-size:22vw;
-    }
-
-    .currently-copy{
-        max-width:100%;
-
-        font-size:12px;
-    }
-
-
-    /* CONTACT */
-
-    .contact{
-        padding-top:100px;
-    }
-
-    .contact-top{
-        display:block;
-
-        margin-bottom:55px;
-    }
-
-    .contact-top > div:last-child{
-        margin-top:20px;
-    }
-
-    .contact-heading{
-        font-size:22vw;
-    }
-
-    .contact-grid{
-        grid-template-columns:1fr;
-
-        margin-top:60px;
-    }
-
-    .contact-links{
-        justify-self:start;
-    }
-
-
-    /* FOOTER */
-
-    footer{
-        flex-direction:column;
-
-        gap:12px;
-    }
-
+body.light .hero-object{
+  background:rgba(255, 255, 255, 0.92);
+  border:1px solid #dcd7ee;
+  box-shadow:0 20px 50px rgba(33, 22, 89, 0.12);
 }
 
-
-@media(max-width:430px){
-
-    .page{
-        padding:0 16px;
-    }
-
-    .top-right{
-        gap:10px;
-    }
-
-    .top-right a{
-        font-size:7px;
-    }
-
-    .theme-toggle span:last-child{
-        display:none;
-    }
-
-    .hero-name{
-        font-size:22vw;
-    }
-
-    .orbit{
-        width:290px;
-    }
-
-    .orbit-instruction{
-        right:-5px;
-
-        font-size:13px;
-    }
-
-    .contact-heading{
-        font-size:21vw;
-    }
-
+body.light .profile-name{ color:#151241; }
+body.light .profile-handle{ color:#6c6792; }
+body.light .profile-rule{ background:#e8e4f5; }
+body.light .profile-tag{
+  background:#eeebf8;
+  color:#3d3472;
+  font-weight:700;
 }
 
+body.light .code-object .window-bar{ background:#e5e1f3; }
+body.light .code-object .window-dot{ background:#9f9ab8; }
+body.light .code-body{ background:#faf9fe; color:#59547d; }
+body.light .c-pink{ color:#bf1895; font-weight:bold; }
+body.light .c-blue{ color:#3631bb; font-weight:bold; }
+body.light .c-white{ color:#16123f; font-weight:bold; }
 
-/* Hide custom cursor on touch devices */
+body.light .section-label{ color:#625b8c; }
 
-@media(pointer:coarse){
-
-    .cursor{
-        display:none;
-    }
-
+body.light .about-box{
+  background:
+    radial-gradient(550px 450px at 90% 12%, rgba(220,53,191,.18), transparent 70%),
+    linear-gradient(135deg, #ede9fb 0%, #e2ddf8 50%, #d8d0f3 100%);
+  border:1px solid #d5ceee;
+  box-shadow:0 35px 90px rgba(35, 24, 95, 0.08);
 }
 
+body.light .about-box:before{
+  border-color:rgba(103, 90, 185, 0.22);
+}
+
+body.light .about-title{ color:#151241; }
+body.light .about-copy{ color:#2a235c; }
+
+body.light .about-window{
+  background:#ffffff;
+  border:1px solid #dcd7ef;
+  box-shadow:0 30px 70px rgba(29, 19, 81, 0.12);
+}
+
+body.light .about-window .window-header{
+  background:#f4f2fb;
+  border-bottom-color:#e6e2f5;
+}
+
+body.light .about-window .window-dot{ background:#b1acca; }
+body.light .about-name{ color:#171244; }
+body.light .about-handle{ color:#736d99; }
+body.light .about-mini-copy{ color:#4d4677; }
+body.light .about-tag{ background:#eeebf8; color:#362d6b; font-weight:700; }
+
+body.light .work-title{ color:#151241; }
+
+body.light .work-stage{
+  background:
+    radial-gradient(500px 400px at 75% 20%, rgba(220,53,191,.22), transparent 70%),
+    linear-gradient(135deg, #ece7fb, #ded7f8 52%, #d1c8f4);
+  border:1px solid #d4ccee;
+  box-shadow:0 35px 90px rgba(35, 24, 95, 0.08);
+}
+
+body.light .work-heading h3{ color:#171244; }
+
+body.light .project{
+  background:#ffffff;
+  border:1px solid #dcd7ef;
+  box-shadow:0 25px 60px rgba(32, 21, 88, 0.12);
+}
+
+body.light .project-name{ color:#171244; }
+body.light .project-arrow{ background:#f0edf9; color:#171244; }
+
+body.light .internet-box{
+  background:linear-gradient(135deg, #f7f6fc, #ede9f9);
+  border:1px solid #d6cfef;
+  box-shadow:0 35px 90px rgba(35, 24, 95, 0.08);
+}
+
+body.light .find-header h2{ color:#151241; }
+body.light .find-sub{ color:#534c7c; }
+
+body.light .find-ring{ border-color:rgba(79, 67, 185, 0.18); }
+body.light .find-ring.r2{ border-color:rgba(219, 71, 199, 0.2); }
+
+body.light .find-core{
+  background:radial-gradient(circle at 35% 25%, #6965ea, #4841cb 65%, #2a228c);
+  box-shadow:0 0 70px rgba(105, 101, 234, 0.35);
+}
+
+body.light .find-card{
+  background:rgba(255, 255, 255, 0.92);
+  border:1px solid #dcd6ef;
+  box-shadow:0 15px 40px rgba(35, 24, 92, 0.08);
+}
+
+body.light .find-card:hover{
+  background:#ffffff;
+  border-color:#b5abd9;
+}
+
+body.light .find-card strong{ color:#151241; }
+body.light .find-icon{ background:#ede9f9; color:#231a61; }
+
+body.light .mindset-symbol{
+  border-color:#d7d1ee;
+  background:#ffffff;
+  color:#231a62;
+  box-shadow:0 6px 20px rgba(35, 24, 95, 0.06);
+}
+
+body.light .mindset h2{ color:#151241; }
+body.light .mindset p{ color:#6e6896; }
+
+body.light .footer-box{
+  background:
+    radial-gradient(500px 400px at 85% 15%, rgba(220,53,191,.25), transparent 70%),
+    linear-gradient(135deg, #e4def8, #cfc6f4);
+  border:1px solid #cfc7ee;
+  box-shadow:0 35px 90px rgba(35, 24, 95, 0.08);
+}
+
+body.light .footer h2{ color:#151241; }
+body.light .footer-bottom{ color:#3c346f; }
+body.light .credits{ color:#736d9b; }
+
+/* =========================================================
+   RESPONSIVENESS
+========================================================= */
+@media(max-width:950px){
+  .hero{ min-height:850px; }
+  .profile-object, .code-object{ display:none; }
+  .about-box{ padding:50px 30px; min-height:auto; border-radius:36px; }
+  .about-window{ position:relative; right:auto; bottom:auto; width:100%; margin-top:40px; transform:none; }
+  .about-window:hover{ transform:none; }
+  .work-stage{ min-height:800px; border-radius:36px; }
+  .work-heading{ left:28px; top:32px; }
+  .project-one{ width:90%; left:5%; bottom:40px; transform:none; }
+  .project-two{ width:75%; right:5%; top:36%; transform:rotate(2deg); }
+  .internet-box{ padding:50px 30px; min-height:auto; border-radius:36px; display:flex; flex-direction:column; }
+  .find-network{ position:relative; right:auto; top:auto; transform:none; width:100%; height:460px; margin:40px auto 0; }
+  .footer-box{ padding:45px 30px; min-height:auto; border-radius:36px; gap:40px; }
+}
+
+@media(max-width:580px){
+  .nav{ top:10px; width:calc(100% - 20px); padding:6px 12px; }
+  .logo{ font-size:15px; }
+  .nav-links a{ padding:7px 9px; font-size:10px; }
+  .mode{ padding:7px 11px; font-size:10px; }
+  
+  .hero{ padding:135px 18px 80px; }
+  .hero-title{ font-size:clamp(52px, 15vw, 84px); line-height:0.92; }
+  .hero-punchword{ font-size:18px; letter-spacing:5px; margin-top:20px; }
+  .hero-actions{ width:100%; flex-direction:column; }
+  .hero-btn{ width:100%; text-align:center; }
+
+  .section{ padding:60px 14px; }
+  .about-box, .work-stage, .internet-box, .footer-box{ padding:35px 20px; border-radius:26px; }
+  .about-title, .work-title, .find-header h2{ font-size:36px; }
+  .about-copy{ font-size:14px; }
+
+  .work-heading h3{ font-size:32px; }
+  .project-two{ position:relative; width:100%; right:auto; top:auto; margin-top:140px; transform:none; }
+  .project-one{ position:relative; width:100%; left:auto; bottom:auto; margin-top:20px; transform:none; }
+  .work-stage{ min-height:auto; padding-bottom:30px; }
+
+  .find-network{ height:380px; }
+  .find-ring.r1{ width:180px; height:180px; }
+  .find-ring.r2{ width:260px; height:260px; }
+  .find-ring.r3{ width:340px; height:340px; }
+  .find-core{ width:90px; height:90px; }
+  .find-card{ width:125px; padding:10px; }
+  .find-card strong{ font-size:10px; }
+  .card-github{ left:0; top:4%; }
+  .card-discord{ right:0; top:10%; }
+  .card-instagram{ left:0; bottom:12%; }
+  .card-x{ right:0; bottom:8%; }
+  .card-reddit{ left:20%; bottom:0; }
+  .card-slack{ right:18%; top:0; }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *, *::before, *::after{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+}
 </style>
 </head>
 
-
 <body>
 
-
-<!-- CUSTOM CURSOR -->
-
-<div class="cursor">
-    <div class="cursor-dot"></div>
-</div>
-
+<div class="grain"></div>
 
 <div class="page">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+  <div class="glow glow-c"></div>
 
-
-<!-- =========================
-     NAVIGATION
-========================= -->
-
-<header class="topbar">
-
-    <div class="top-left">
-
-        <div class="mark">
-            M
-        </div>
-
-        <span>
-            justmishchief
-        </span>
-
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#top" class="logo">justmishchief</a>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#work">work</a>
+      <a href="#contact">contact</a>
+      <button class="mode" id="modeBtn">light</button>
     </div>
+  </nav>
 
+  <main id="top">
 
-    <nav class="top-right">
-
-        <a href="#work">
-            work
-        </a>
-
-        <a href="#about">
-            about
-        </a>
-
-        <a href="#contact">
-            contact
-        </a>
-
-
-        <button
-            class="theme-toggle"
-            id="themeToggle"
-            aria-label="Toggle dark mode"
-        >
-
-            <span class="theme-icon">
-                ◐
-            </span>
-
-            <span>
-                mode
-            </span>
-
-        </button>
-
-    </nav>
-
-</header>
-
-
-
-<!-- =========================
-     HERO
-========================= -->
-
-<section class="hero">
-
-
-    <div class="hero-small">
-        somewhere on the internet
-    </div>
-
-
-    <div>
-
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
         <div class="eyebrow">
-            self-taught / still learning
+          <span class="live-dot"></span>
+          portfolio and playground
         </div>
 
-
-        <h1 class="hero-name">
-            Mishika
+        <h1 class="hero-title">
+          <span class="line">just</span>
+          <span class="line shine">mishchief</span>
         </h1>
 
+        <div class="hero-punchword">UNFILTERED</div>
 
-        <p class="hero-note">
+        <div class="hero-actions">
+          <a href="#about" class="hero-btn primary">explore about ↘</a>
+          <a href="#work" class="hero-btn secondary">things i made ↘</a>
+        </div>
 
-            I like making things, figuring things out,
-            and occasionally disappearing into a project
-            for far longer than I planned.
+        <!-- PROFILE WIDGET -->
+        <div class="hero-object profile-object">
+          <div class="profile-top">
+            <div class="profile-avatar">M</div>
+            <div>
+              <div class="profile-name">Mishika</div>
+              <div class="profile-handle">@justmishchief</div>
+            </div>
+          </div>
+          <div class="profile-rule"></div>
+          <span class="profile-tag">curious</span>
+          <span class="profile-tag">chaotic</span>
+          <span class="profile-tag">lazy</span>
+        </div>
 
-            <br><br>
+        <!-- CODE WIDGET -->
+        <div class="hero-object code-object">
+          <div class="window-bar">
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+          </div>
+          <div class="code-body">
+            <div><span class="c-pink">const</span> brain = {</div>
+            <div>&nbsp;&nbsp;interests: <span class="c-white">"infinite"</span>,</div>
+            <div>&nbsp;&nbsp;action: <span class="c-blue">"tomorrow"</span>,</div>
+            <div>&nbsp;&nbsp;nap: <span class="c-white">true</span></div>
+            <div>};</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <strong>
-                Still learning. Still making. Still becoming.
-            </strong>
+    <!-- ABOUT -->
+    <section class="section reveal" id="about">
+      <div class="section-inner">
+        <div class="about-box">
+          <div class="about-content">
+            <div class="section-label">01 / profile</div>
+            <h2 class="about-title">WHO IS<br>MISHIKA?</h2>
 
-        </p>
+            <div class="about-copy">
+              <p>
+                A girl with way too much on her plate, yet somehow she ends up putting everything on hold.
+              </p>
+              <p>
+                Countless active interests, zero patience, and a constant habit of overthinking every detail. The motivation arrives in intense midnight bursts right before vanishing completely into pure rest mode.
+              </p>
+            </div>
+          </div>
 
-    </div>
+          <div class="about-window">
+            <div class="window-header">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <div class="about-window-body">
+              <div class="about-avatar">M</div>
+              <div class="about-name">Mishika</div>
+              <div class="about-handle">justmishchief</div>
+              <div class="about-mini-copy">
+                interested in virtually everything, committed to staying asleep first.
+              </div>
+              <div class="about-tags">
+                <span class="about-tag">active mind</span>
+                <span class="about-tag">procrastinator</span>
+                <span class="about-tag">overthinker</span>
+                <span class="about-tag">curious</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- WORK -->
+    <section class="section work reveal" id="work">
+      <div class="section-inner">
+        <div class="work-intro">
+          <div class="section-label">02 / experiments</div>
+          <h2 class="work-title">THINGS<br>I MADE</h2>
+        </div>
 
+        <div class="work-stage">
+          <div class="work-heading">
+            <div class="section-label">recent builds</div>
+            <h3>SOME WORK<br>SOME DELETED<br>WHO CARES?</h3>
+          </div>
 
-    <!-- NICKNAME ORBIT -->
+          <!-- PROJECT ONE -->
+          <a class="project project-one" href="https://justmishchief.xyz/" target="_blank" rel="noopener">
+            <div class="window-bar">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <div class="project-body">
+              <div class="project-title-row">
+                <div class="project-name">justmishchief.xyz</div>
+                <div class="project-arrow">↗</div>
+              </div>
+              <div class="project-preview">
+                <div class="project-preview-text">my little<br>internet</div>
+              </div>
+            </div>
+          </a>
 
-    <div class="hero-right">
+          <!-- PROJECT TWO -->
+          <a class="project project-two" href="https://justmishchief.github.io/perfect-day-game/" target="_blank" rel="noopener">
+            <div class="window-bar">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <div class="project-body">
+              <div class="project-title-row">
+                <div class="project-name">perfect day</div>
+                <div class="project-arrow">↗</div>
+              </div>
+              <div class="game-preview">
+                <div class="game-sun"></div>
+                <div class="game-mountain"></div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
 
-        <div class="orbit-wrap">
+    <!-- CONTACT -->
+    <section class="section internet reveal" id="contact">
+      <div class="section-inner">
+        <div class="internet-box">
+          <div class="find-header">
+            <div class="section-label">03 / network</div>
+            <h2>FIND ME<br>IN THE WILD</h2>
+            <p class="find-sub">Available whenever procrastination allows.</p>
+          </div>
 
+          <div class="find-network">
+            <div class="find-ring r1"></div>
+            <div class="find-ring r2"></div>
+            <div class="find-ring r3"></div>
 
-            <div class="orbit-instruction">
-                rotate it to know my nicknames
+            <div class="find-core">
+              <div class="core-symbol">★</div>
+              <div class="core-name">MISHIKA</div>
+              <div class="core-small">@justmishchief</div>
             </div>
 
-
-            <div
-                class="orbit"
-                id="orbit"
-            >
-
-                <div
-                    class="orbit-dot"
-                    id="orbitDot"
-                ></div>
-
-
-                <div class="orbit-center">
-
-                    <span
-                        class="orbit-center-text"
-                        id="orbitText"
-                    >
-                        mish
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =========================
-     INTRO
-========================= -->
-
-<section class="intro reveal">
-
-
-    <div class="section-number">
-        01 / INTRO
-    </div>
-
-
-    <div class="intro-text">
-
-        I'm a self-taught coder who likes
-
-        <span class="quiet">
-            learning by actually trying things,
-        </span>
-
-        breaking them,
-
-        <span class="serif">
-            fixing them,
-        </span>
-
-        and then wondering what else I can make.
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =========================
-     ABOUT
-========================= -->
-
-<section
-    class="about reveal"
-    id="about"
->
-
-
-    <div class="about-block">
-
-        <div class="label">
-            02 / ABOUT
-        </div>
-
-
-        <div class="about-big">
-
-            No perfect roadmap.
-
-            <br>
-
-            Just
-
-            <em>
-                curiosity,
-            </em>
-
-            stubbornness
-
-            and a lot of tabs open.
-
-        </div>
-
-    </div>
-
-
-
-    <div class="about-block">
-
-        <div class="label">
-            A LITTLE MORE
-        </div>
-
-
-        <div class="about-copy">
-
-            <p>
-                I didn't start with fancy resources or
-                some perfectly planned path. I mostly
-                learned because I wanted to know how
-                things worked.
-            </p>
-
-
-            <p>
-                Coding is one part of it. I like creating,
-                writing, experimenting and picking up
-                random things just because they seem
-                interesting.
-            </p>
-
-
-            <p>
-                I'm still figuring out what I want to
-                become. For now, I'm enjoying the process
-                of becoming someone who can build it.
-            </p>
-
-        </div>
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =========================
-     WORK
-========================= -->
-
-<section
-    class="work reveal"
-    id="work"
->
-
-
-    <div class="work-header">
-
-        <div>
-
-            <div class="label">
-                03 / WORK
-            </div>
-
-
-            <h2 class="work-title">
-
-                things
-
-                <br>
-
-                <em>
-                    I've made.
-                </em>
-
-            </h2>
-
-        </div>
-
-
-        <p class="work-intro">
-
-            A small collection of things I've built,
-            experimented with, or put together because
-            I wanted to see if I could.
-
-        </p>
-
-    </div>
-
-
-
-    <!-- PROJECT 01 -->
-
-    <a
-        class="project"
-        href="https://justmishchief.github.io/perfect-day-game/"
-        target="_blank"
-        rel="noopener"
-    >
-
-        <div class="project-no">
-            01
-        </div>
-
-
-        <div>
-
-            <div class="project-name">
-                My Perfect Day
-            </div>
-
-
-            <p class="project-description">
-
-                A small game made during a hackathon.
-                One of those projects that started with
-                an idea and ended with me learning a
-                bunch of things I didn't expect to learn.
-
-            </p>
-
-        </div>
-
-
-        <div class="project-meta">
-
-            <span>
-                game / hackathon
-            </span>
-
-            <span class="project-link">
-                visit ↗
-            </span>
-
-        </div>
-
-
-    </a>
-
-
-
-    <!-- PROJECT 02 -->
-
-    <a
-        class="project"
-        href="https://justmishchief.xyz/"
-        target="_blank"
-        rel="noopener"
-    >
-
-        <div class="project-no">
-            02
-        </div>
-
-
-        <div>
-
-            <div class="project-name">
-                This website
-            </div>
-
-
-            <p class="project-description">
-
-                A little corner of the internet that is
-                supposed to feel like me rather than a
-                standard portfolio template.
-
-            </p>
-
-        </div>
-
-
-        <div class="project-meta">
-
-            <span>
-                design / code
-            </span>
-
-            <span class="project-link">
-                you're here ↗
-            </span>
-
-        </div>
-
-
-    </a>
-
-
-</section>
-
-
-
-<!-- =========================
-     CURRENTLY
-========================= -->
-
-<section class="currently reveal">
-
-
-    <div class="currently-grid">
-
-
-        <div>
-
-            <div class="currently-label">
-                04 / CURRENTLY
-            </div>
-
-
-            <h2 class="currently-title">
-
-                still
-
-                <br>
-
-                <em>
-                    loading.
-                </em>
-
-            </h2>
-
-        </div>
-
-
-
-        <div class="currently-copy">
-
-            <p>
-                There isn't a perfectly polished answer
-                to what I'm doing right now.
-            </p>
-
-
-            <p>
-                I'm learning code, trying different things,
-                making small projects and occasionally
-                getting obsessed with something completely
-                unrelated.
-            </p>
-
-
-            <p>
-
-                <strong>
-                    Which is probably exactly where I
-                    should be right now.
-                </strong>
-
-            </p>
-
-        </div>
-
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =========================
-     CONTACT
-========================= -->
-
-<section
-    class="contact reveal"
-    id="contact"
->
-
-
-    <div class="contact-top">
-
-
-        <div class="label">
-            05 / CONTACT
-        </div>
-
-
-        <div style="
-            font-family:var(--mono);
-            font-size:9px;
-            color:var(--muted);
-            text-transform:uppercase;
-        ">
-            always open to a good conversation
-        </div>
-
-
-    </div>
-
-
-
-    <h2 class="contact-heading">
-
-        contact
-
-        <br>
-
-        <em>
-            me.
-        </em>
-
-    </h2>
-
-
-
-    <div class="contact-grid">
-
-
-        <p class="contact-note">
-
-            For questions, collaborations, ideas,
-            project conversations, or anything worth
-            talking about — you can find me here.
-
-        </p>
-
-
-
-        <div class="contact-links">
-
-
-            <!-- EMAIL -->
-
-            <a
-                class="contact-link"
-                href="mailto:mishika0749@gmail.com"
-            >
-
-                <span>
-                    Email
-                </span>
-
-                <span>
-                    mishika0749@gmail.com
-                </span>
-
+            <a class="find-card card-github" href="https://github.com/justmishchief" target="_blank" rel="noopener">
+              <div class="find-icon">⌘</div>
+              <strong>GitHub ↗</strong>
             </a>
 
-
-
-            <!-- GITHUB -->
-
-            <a
-                class="contact-link"
-                href="https://github.com/justmishchief"
-                target="_blank"
-                rel="noopener"
-            >
-
-                <span>
-                    GitHub
-                </span>
-
-                <span>
-                    justmishchief ↗
-                </span>
-
+            <a class="find-card card-discord" href="https://discord.com/users/1509588661098909778" target="_blank" rel="noopener">
+              <div class="find-icon">◉</div>
+              <strong>Discord ↗</strong>
             </a>
 
-
-
-            <!-- LINKEDIN -->
-
-            <a
-                class="contact-link"
-                href="https://www.linkedin.com/"
-                target="_blank"
-                rel="noopener"
-            >
-
-                <span>
-                    LinkedIn
-                </span>
-
-                <span>
-                    Mishika ↗
-                </span>
-
+            <a class="find-card card-instagram" href="https://www.instagram.com/justmishchief/" target="_blank" rel="noopener">
+              <div class="find-icon">◎</div>
+              <strong>Instagram ↗</strong>
             </a>
 
-
-
-            <!-- DISCORD -->
-
-            <a
-                class="contact-link"
-                href="https://discord.com/users/1509588661098909778"
-                target="_blank"
-                rel="noopener"
-            >
-
-                <span>
-                    Discord
-                </span>
-
-                <span>
-                    justmishchief ↗
-                </span>
-
+            <a class="find-card card-x" href="https://x.com/justmishchief" target="_blank" rel="noopener">
+              <div class="find-icon">𝕏</div>
+              <strong>X ↗</strong>
             </a>
 
-
-
-            <!-- X / TWITTER -->
-
-            <a
-                class="contact-link"
-                href="https://x.com/justmishchief"
-                target="_blank"
-                rel="noopener"
-            >
-
-                <span>
-                    X / Twitter
-                </span>
-
-                <span>
-                    @justmishchief ↗
-                </span>
-
+            <a class="find-card card-reddit" href="https://www.reddit.com/user/justmishchief/" target="_blank" rel="noopener">
+              <div class="find-icon">●</div>
+              <strong>Reddit ↗</strong>
             </a>
 
-
-
-            <!-- REDDIT -->
-
-            <a
-                class="contact-link"
-                href="https://www.reddit.com/user/justmishchief/"
-                target="_blank"
-                rel="noopener"
-            >
-
-                <span>
-                    Reddit
-                </span>
-
-                <span>
-                    u/justmishchief ↗
-                </span>
-
+            <a class="find-card card-slack" href="https://hackclub.enterprise.slack.com/team/U0BBNTHLJMR" target="_blank" rel="noopener">
+              <div class="find-icon">✣</div>
+              <strong>Slack ↗</strong>
             </a>
-
-
-
-            <!-- INSTAGRAM -->
-
-            <a
-                class="contact-link"
-                href="https://www.instagram.com/justmishchief/"
-                target="_blank"
-                rel="noopener"
-            >
-
-                <span>
-                    Instagram
-                </span>
-
-                <span>
-                    @justmishchief ↗
-                </span>
-
-            </a>
-
-
-
-            <!-- SLACK -->
-
-            <a
-                class="contact-link"
-                href="https://hackclub.enterprise.slack.com/team/U0BBNTHLJMR"
-                target="_blank"
-                rel="noopener"
-            >
-
-                <span>
-                    Slack
-                </span>
-
-                <span>
-                    U0BBNTHLJMR ↗
-                </span>
-
-            </a>
-
-
+          </div>
         </div>
+      </div>
+    </section>
 
+    <!-- MINDSET -->
+    <section class="mindset reveal">
+      <div class="mindset-inner">
+        <div class="mindset-symbol">★</div>
+        <h2>I AM NOT MUCH<br>BUT I AM ALL I HAVE</h2>
+        <p>mindset</p>
+      </div>
+    </section>
 
-    </div>
-
-
-</section>
-
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-    <span>
-        justmishchief
-    </span>
-
-
-    <span class="footer-love">
-        MADE WITH <b>♥</b> BY MISHIKA
-    </span>
-
-
-    <span>
-        somewhere on the internet
-    </span>
-
-</footer>
-
-
+    <!-- FOOTER -->
+    <footer class="footer reveal">
+      <div class="footer-box">
+        <h2>SEE YOU<br>AROUND</h2>
+        <div class="footer-bottom">
+          That is all for now.<br>
+          Feel free to reach out anytime.
+        </div>
+      </div>
+      <div class="credits">MADE WITH LOVE BY MISHIKA</div>
+    </footer>
+  </main>
 </div>
 
-
-
 <script>
-
-
-/* =========================
-   DARK MODE
-========================= */
-
-const themeToggle =
-    document.getElementById("themeToggle");
-
-const themeIcon =
-    themeToggle.querySelector(".theme-icon");
-
-
-const savedTheme =
-    localStorage.getItem("mishika-theme");
-
-
-if(savedTheme === "dark"){
-
-    document.body.classList.add("dark");
-
-    themeIcon.textContent = "○";
-
-}
-
-
-themeToggle.addEventListener("click",()=>{
-
-    document.body.classList.toggle("dark");
-
-
-    const isDark =
-        document.body.classList.contains("dark");
-
-
-    themeIcon.textContent =
-        isDark ? "○" : "◐";
-
-
-    localStorage.setItem(
-        "mishika-theme",
-        isDark ? "dark" : "light"
-    );
-
+// MODE TOGGLE
+const modeBtn = document.getElementById("modeBtn");
+modeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+  const isLight = document.body.classList.contains("light");
+  modeBtn.textContent = isLight ? "dark" : "light";
 });
 
+// SCROLL REVEAL
+const reveal = document.querySelectorAll(".reveal");
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){ entry.target.classList.add("visible"); }
+  });
+}, { threshold:.1 });
+reveal.forEach(el => observer.observe(el));
 
-
-/* =========================
-   CUSTOM CURSOR
-========================= */
-
-const cursor =
-    document.querySelector(".cursor");
-
-
-window.addEventListener("mousemove",(e)=>{
-
-    if(!cursor) return;
-
-
-    cursor.style.left =
-        e.clientX + "px";
-
-    cursor.style.top =
-        e.clientY + "px";
-
+// HERO PARALLAX
+const profile = document.querySelector(".profile-object");
+const code = document.querySelector(".code-object");
+window.addEventListener("mousemove", event => {
+  if(window.innerWidth < 950 || !profile || !code) return;
+  const x = (event.clientX / window.innerWidth) - 0.5;
+  const y = (event.clientY / window.innerHeight) - 0.5;
+  profile.style.marginLeft = `${x * 10}px`;
+  profile.style.marginTop = `${y * 8}px`;
+  code.style.marginRight = `${x * 10}px`;
+  code.style.marginTop = `${y * 8}px`;
 });
 
-
-document
-    .querySelectorAll("a,button,.orbit-dot")
-    .forEach((el)=>{
-
-        el.addEventListener(
-            "mouseenter",
-            ()=>{
-                cursor.classList.add("hover");
-            }
-        );
-
-
-        el.addEventListener(
-            "mouseleave",
-            ()=>{
-                cursor.classList.remove("hover");
-            }
-        );
-
-    });
-
-
-
-/* =========================
-   SCROLL REVEAL
-========================= */
-
-const revealElements =
-    document.querySelectorAll(".reveal");
-
-
-const revealObserver =
-    new IntersectionObserver(
-
-        (entries)=>{
-
-            entries.forEach((entry)=>{
-
-                if(entry.isIntersecting){
-
-                    entry.target.classList.add("show");
-
-                    revealObserver.unobserve(
-                        entry.target
-                    );
-
-                }
-
-            });
-
-        },
-
-        {
-            threshold:.12
-        }
-
-    );
-
-
-revealElements.forEach((el)=>{
-
-    revealObserver.observe(el);
-
+// SMOOTH SCROLLING
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener("click", event => {
+    const target = document.querySelector(link.getAttribute("href"));
+    if(target){
+      event.preventDefault();
+      target.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+  });
 });
-
-
-
-/* =========================
-   NICKNAME ORBIT
-========================= */
-
-const orbit =
-    document.getElementById("orbit");
-
-
-const orbitDot =
-    document.getElementById("orbitDot");
-
-
-const orbitText =
-    document.getElementById("orbitText");
-
-
-const nicknames = [
-
-    "mishika",
-    "mish",
-    "mishu",
-    "mishi",
-    "mishchief"
-
-];
-
-
-let currentAngle = 0;
-
-let dragging = false;
-
-let lastAngle = 0;
-
-let accumulatedRotation = 0;
-
-
-
-function getAngle(event){
-
-    const rect =
-        orbit.getBoundingClientRect();
-
-
-    const centerX =
-        rect.left + rect.width / 2;
-
-
-    const centerY =
-        rect.top + rect.height / 2;
-
-
-    const x =
-        event.clientX - centerX;
-
-
-    const y =
-        event.clientY - centerY;
-
-
-    return Math.atan2(y,x)
-        * 180 / Math.PI;
-
-}
-
-
-
-function rotateOrbit(delta){
-
-    currentAngle += delta;
-
-
-    orbitDot.style.left =
-        `calc(50% + ${
-            Math.cos(
-                (currentAngle - 90)
-                * Math.PI / 180
-            ) * 45
-        }% )`;
-
-
-    orbitDot.style.top =
-        `calc(50% + ${
-            Math.sin(
-                (currentAngle - 90)
-                * Math.PI / 180
-            ) * 45
-        }% )`;
-
-
-    accumulatedRotation += delta;
-
-
-    const index =
-        Math.floor(
-            Math.abs(accumulatedRotation) / 55
-        ) % nicknames.length;
-
-
-    orbitText.style.opacity = "0";
-
-
-    setTimeout(()=>{
-
-        orbitText.textContent =
-            nicknames[index];
-
-        orbitText.style.opacity =
-            "1";
-
-    },120);
-
-}
-
-
-
-/* DRAG */
-
-orbitDot.addEventListener(
-    "pointerdown",
-    (event)=>{
-
-        dragging = true;
-
-
-        orbitDot.setPointerCapture(
-            event.pointerId
-        );
-
-
-        lastAngle =
-            getAngle(event);
-
-    }
-);
-
-
-orbitDot.addEventListener(
-    "pointermove",
-    (event)=>{
-
-        if(!dragging) return;
-
-
-        const newAngle =
-            getAngle(event);
-
-
-        let delta =
-            newAngle - lastAngle;
-
-
-        if(delta > 180){
-            delta -= 360;
-        }
-
-
-        if(delta < -180){
-            delta += 360;
-        }
-
-
-        rotateOrbit(delta);
-
-
-        lastAngle =
-            newAngle;
-
-    }
-);
-
-
-orbitDot.addEventListener(
-    "pointerup",
-    ()=>{
-        dragging = false;
-    }
-);
-
-
-orbitDot.addEventListener(
-    "pointercancel",
-    ()=>{
-        dragging = false;
-    }
-);
-
-
-
-/* MOUSE / TRACKPAD */
-
-orbit.addEventListener(
-    "wheel",
-    (event)=>{
-
-        event.preventDefault();
-
-
-        rotateOrbit(
-
-            event.deltaY > 0
-                ? 10
-                : -10
-
-        );
-
-    },
-    {
-        passive:false
-    }
-);
-
-
 </script>
 
 </body>
