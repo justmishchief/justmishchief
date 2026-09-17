@@ -1319,10 +1319,43 @@ window.addEventListener("mousemove", event => {
   if(window.innerWidth < 950 || !profile || !code) return;
   const x = (event.clientX / window.innerWidth) - 0.5;
   const y = (event.clientY / window.innerHeight) - 0.5;
-  profile.style.marginLeft = `${x * 10}px`;
-  profile.style.marginTop = `${y * 8}px`;
-  code.style.marginRight = `${x * 10}px`;
-  code.style.marginTop = `${y * 8}px`;
+  if(profile) {
+    profile.style.marginLeft = `${x * 10}px`;
+    profile.style.marginTop = `${y * 8}px`;
+  }
+  if(code) {
+    code.style.marginRight = `${x * 10}px`;
+    code.style.marginTop = `${y * 8}px`;
+  }
+});
+
+// PRIVATE VISITOR LOG SUBMISSION
+const guestbookForm = document.getElementById("guestbookForm");
+const guestbookStatus = document.getElementById("guestbookStatus");
+
+guestbookForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = guestbookForm.querySelector("input");
+  const note = input.value.trim();
+  if(!note) return;
+
+  try {
+    await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        access_key: "YOUR_ACCESS_KEY",
+        message: `Visitor Note: ${note}`,
+        from_name: "justmishchief visitor"
+      })
+    });
+  } catch (err) {
+    // Silent failover
+  }
+
+  input.value = "";
+  guestbookStatus.style.display = "block";
+  setTimeout(() => { guestbookStatus.style.display = "none"; }, 4000);
 });
 
 // SMOOTH SCROLLING
