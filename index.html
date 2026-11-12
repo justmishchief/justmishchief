@@ -8,7 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+a,button{outline:none}
+a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
 html{scroll-behavior:smooth}
 body{overflow-x:hidden;background:#10104a;color:#fff;font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif;transition:background .4s ease,color .4s ease}
 a{color:inherit;text-decoration:none}
@@ -54,6 +56,7 @@ button,input{font:inherit}
 .window-dot{width:6px;height:6px;border-radius:50%;background:#686675}
 .code-body{padding:16px;background:#121217;text-align:left;font:10px/1.8 monospace;color:#9a99b4}
 .c-pink{color:#ec57cc}.c-blue{color:#7d7bff}.c-white{color:#f0eff8}
+
 
 /* SECTIONS */
 .section{position:relative;padding:90px 22px}
@@ -105,26 +108,27 @@ button,input{font:inherit}
 .find-header{position:relative;z-index:6;max-width:540px}
 .find-header h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(46px,6.5vw,88px);line-height:.88;letter-spacing:-.035em;font-weight:800}
 .find-sub{margin-top:20px;color:#b1b0cf;font-size:14px;line-height:1.6}
-.find-network{position:absolute;z-index:3;top:50%;right:5%;width:540px;height:480px;transform:translateY(-45%)}
-.find-ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(128,125,238,.2);pointer-events:none}
-.find-ring.r1{width:250px;height:250px}
-.find-ring.r2{width:370px;height:370px;border-color:rgba(219,71,199,.15)}
-.find-ring.r3{width:480px;height:480px;border-color:rgba(128,125,238,.1)}
-.find-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:125px;height:125px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-radius:36px;background:radial-gradient(circle at 35% 25%,#7976f1,#4b46c6 58%,#30277e);border:1px solid rgba(255,255,255,.25);box-shadow:0 0 80px rgba(91,86,226,.45),0 25px 65px rgba(0,0,0,.3);animation:coreBreath 5s ease-in-out infinite}
+.find-hint{margin-top:14px;color:#8d8cb3;font-size:11px;letter-spacing:1px}
+.orbit{position:absolute;z-index:3;top:50%;right:5%;width:520px;height:520px;transform:translateY(-48%)}
+.orbit-ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed rgba(128,125,238,.3);pointer-events:none}
+.orbit-ring.o1{width:260px;height:260px}
+.orbit-ring.o2{width:380px;height:380px;border-style:solid;border-color:rgba(219,71,199,.16)}
+.orbit-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:125px;height:125px;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;border-radius:36px;background:radial-gradient(circle at 35% 25%,#7976f1,#4b46c6 58%,#30277e);border:1px solid rgba(255,255,255,.25);box-shadow:0 0 80px rgba(91,86,226,.45),0 25px 65px rgba(0,0,0,.3);animation:coreBreath 5s ease-in-out infinite}
 @keyframes coreBreath{0%,100%{transform:translate(-50%,-50%) rotate(-2deg)}50%{transform:translate(-50%,-53%) rotate(2deg)}}
 .core-symbol{font-size:18px;margin-bottom:6px}
 .core-name{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px}
 .core-small{margin-top:3px;color:#d2d0f3;font-size:9px}
-.find-card{position:absolute;display:flex;align-items:center;gap:12px;width:160px;padding:12px 16px;border:1px solid rgba(255,255,255,.14);border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));backdrop-filter:blur(17px);box-shadow:0 20px 50px rgba(0,0,0,.2);transition:all .35s ease}
-.find-card:hover{z-index:10;transform:translateY(-8px) scale(1.035) rotate(0deg)!important;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3)}
-.find-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.1);color:#e7e6f5;font-size:13px}
-.find-card strong{display:block;color:#fff;font-size:12px;font-weight:800;letter-spacing:-.2px}
-.card-github{left:8%;top:8%;transform:rotate(-5deg)}
-.card-discord{right:2%;top:16%;transform:rotate(5deg)}
-.card-instagram{left:1%;bottom:16%;transform:rotate(4deg)}
-.card-x{right:4%;bottom:12%;transform:rotate(-5deg)}
-.card-reddit{left:30%;bottom:1%;transform:rotate(4deg)}
-.card-slack{right:28%;top:2%;transform:rotate(-3deg)}
+.orbit-track{position:absolute;inset:0;animation:orbSpin 70s linear infinite}
+.orb{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateX(190px)}
+.orb-in{position:absolute;left:0;top:0;animation:orbUnspin 70s linear infinite}
+@keyframes orbSpin{to{transform:rotate(360deg)}}
+@keyframes orbUnspin{from{transform:translate(-50%,-50%) rotate(calc(var(--a) * -1))}to{transform:translate(-50%,-50%) rotate(calc(var(--a) * -1 - 360deg))}}
+.orbit:hover .orbit-track,.orbit:hover .orb-in{animation-play-state:paused}
+.orb-card{display:flex;align-items:center;gap:11px;width:160px;padding:12px 14px;border:1px solid rgba(255,255,255,.16);border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.04));backdrop-filter:blur(17px);box-shadow:0 20px 50px rgba(0,0,0,.22);transition:transform .3s ease,background .3s ease,border-color .3s ease}
+.orb-card:hover{transform:translateY(-6px) scale(1.06);background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.34)}
+.orb-icon{width:32px;height:32px;flex-shrink:0;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.12);color:#e7e6f5;font-size:13px;font-weight:800}
+.orb-name{display:block;color:#fff;font-size:12px;font-weight:800}
+.orb-sub{display:block;margin-top:2px;color:#b1b0cf;font-size:10px;font-weight:600}
 
 /* GUESTBOOK */
 .guestbook-section{padding:60px 22px 40px}
@@ -153,63 +157,46 @@ button,input{font:inherit}
 .reveal{opacity:0;transform:translateY(35px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
-/* LIGHT MODE (cream + violet + soft pink) */
-body.light{background:#fbf9f6;color:#1b1830}
-body.light .page{background:radial-gradient(700px 550px at 4% 0%,rgba(109,74,255,.10),transparent 70%),radial-gradient(650px 500px at 100% 20%,rgba(255,122,182,.14),transparent 68%),linear-gradient(180deg,#fbf9f6 0%,#f8f4ff 55%,#f6efff 100%)}
-body.light .nav{background:rgba(255,255,255,.85);border:1px solid #e8e3f3;box-shadow:0 14px 45px rgba(27,24,48,.07)}
-body.light .logo{color:#1b1830}
-body.light .nav-links a{color:#5b5675}
-body.light .nav-links a:hover{color:#1b1830;background:#f1edf9}
-body.light .mode{background:#1b1830;color:#fff}
-body.light .hero-title .shine{background:linear-gradient(100deg,#1b1830 10%,#5b3df5 50%,#e0479e 85%,#1b1830 98%);background-size:240% auto;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
-body.light .hero-punchword{color:#1b1830}
-body.light .hero-object{background:#fff;border:1px solid #e8e3f3;box-shadow:0 20px 50px rgba(27,24,48,.10)}
-body.light .profile-name{color:#1b1830}
-body.light .profile-handle{color:#7a74a0}
-body.light .profile-rule{background:#eee9f8}
-body.light .profile-tag{background:#f3effc;color:#4a3f8a;font-weight:700}
-body.light .section-label{color:#7a74a0}
-body.light .about-box{background:linear-gradient(135deg,#efe9ff 0%,#f7e8ff 55%,#ffe6f1 100%);border:1px solid #e6dcf7;box-shadow:0 35px 90px rgba(27,24,48,.07)}
-body.light .about-box:before{border-color:rgba(109,74,255,.15)}
-body.light .about-title{color:#1b1830}
-body.light .about-copy{color:#3a3558}
-body.light .about-window{background:#fff;border:1px solid #e8e3f3;box-shadow:0 30px 70px rgba(27,24,48,.10)}
-body.light .window-header{border-bottom-color:#eee9f8}
-body.light .about-name{color:#1b1830}
-body.light .about-handle{color:#7a74a0}
-body.light .about-mini-copy{color:#4d4872}
-body.light .about-tag{background:#f3effc;color:#4a3f8a;font-weight:700}
-body.light .work-title,body.light .work-heading h3{color:#1b1830}
-body.light .work-stage{background:linear-gradient(135deg,#e9f0ff,#efe9ff 55%,#ffe8f2);border:1px solid #e6dcf7;box-shadow:0 35px 90px rgba(27,24,48,.07)}
-body.light .proj{background:#fff;border:1px solid #e8e3f3;box-shadow:0 20px 50px rgba(27,24,48,.09)}
-body.light .proj-name{color:#1b1830}
-body.light .proj-desc{color:#5b5675}
-body.light .proj-status{background:#e3f7ec;color:#17794a}
-body.light .proj-status.wip{background:#fff1d6;color:#9a6200}
-body.light .tech-tag{background:#f3effc;color:#4a3f8a}
-body.light .project-arrow{background:#f3effc;color:#1b1830}
-body.light .internet-box{background:linear-gradient(135deg,#fff,#f6f0ff);border:1px solid #e6dcf7;box-shadow:0 35px 90px rgba(27,24,48,.07)}
+/* LIGHT MODE (bright page + same vivid colour blocks as dark) */
+body.light{background:#f6f2ff;color:#17123f}
+body.light .page{background:radial-gradient(800px 600px at 0% 0%,rgba(112,73,215,.28),transparent 70%),radial-gradient(700px 550px at 100% 18%,rgba(255,90,190,.26),transparent 68%),radial-gradient(700px 600px at 30% 100%,rgba(80,100,255,.22),transparent 70%),linear-gradient(180deg,#f8f4ff 0%,#efe8ff 55%,#ffeaf6 100%)}
+body.light .glow{opacity:.4}
+body.light .nav{background:rgba(255,255,255,.72);border:1px solid rgba(112,73,215,.16);box-shadow:0 14px 45px rgba(80,50,180,.14)}
+body.light .logo{color:#17123f}
+body.light .nav-links a{color:#4b4380}
+body.light .nav-links a:hover{color:#17123f;background:rgba(112,73,215,.1)}
+body.light .mode{background:linear-gradient(135deg,#4141ca,#a43bd0);color:#fff}
+body.light .hero-title .shine{background:linear-gradient(105deg,#3736c9 5%,#7049d7 38%,#dc35bf 72%,#3736c9 98%);background-size:240% auto;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 12px 28px rgba(112,73,215,.28))}
+body.light .hero-punchword{color:#17123f}
+body.light .profile-object{background:#fff;border:1px solid rgba(112,73,215,.18);box-shadow:0 25px 60px rgba(80,50,180,.22)}
+body.light .profile-name{color:#17123f}
+body.light .profile-handle{color:#7a70b8}
+body.light .profile-rule{background:#eee9fb}
+body.light .profile-tag{background:#f1ebff;color:#4b3fb0;font-weight:700}
+body.light .code-object{box-shadow:0 25px 60px rgba(80,50,180,.3)}
+body.light .section-label{color:#6a5fb0}
+body.light .about-box{color:#fff;box-shadow:0 45px 100px rgba(90,60,200,.38),inset 0 1px 0 rgba(255,255,255,.3)}
+body.light .about-window{box-shadow:0 40px 90px rgba(40,20,120,.4)}
+body.light .work-title{color:#17123f}
+body.light .work-stage{color:#fff;box-shadow:0 45px 100px rgba(90,60,200,.38)}
+body.light .internet-box{color:#fff;background:radial-gradient(430px 430px at 76% 53%,rgba(255,255,255,.14),transparent 72%),radial-gradient(420px 380px at 92% 95%,rgba(255,90,190,.55),transparent 70%),linear-gradient(135deg,#2f2bb8,#6b3dd6 55%,#b43bd0);border:1px solid rgba(255,255,255,.25);box-shadow:0 45px 100px rgba(90,60,200,.38)}
 body.light .internet-box:before{opacity:.5}
-body.light .find-header h2{color:#1b1830}
-body.light .find-sub{color:#5b5675}
-body.light .find-card{background:#fff;border:1px solid #e8e3f3;box-shadow:0 15px 40px rgba(27,24,48,.07)}
-body.light .find-card:hover{background:#faf7ff;border-color:#d9cff2}
-body.light .find-card strong{color:#1b1830}
-body.light .find-icon{background:#f3effc;color:#4a3f8a}
-body.light .core-name,body.light .core-symbol{color:#fff}
-body.light .guestbook-box{background:#fff;border-color:#e8e3f3;box-shadow:0 15px 40px rgba(27,24,48,.06)}
-body.light .guestbook-title{color:#1b1830}
-body.light .guestbook-desc{color:#5b5675}
-body.light .guestbook-input{background:#faf8ff;border-color:#e8e3f3;color:#1b1830}
+body.light .find-header h2{color:#fff}
+body.light .find-sub{color:#e6e3ff}
+body.light .find-hint{color:#d3ceff}
+body.light .orbit-ring{border-color:rgba(255,255,255,.3)}
+body.light .orbit-ring.o2{border-color:rgba(255,255,255,.18)}
+body.light .guestbook-box{background:rgba(255,255,255,.85);border:1px solid rgba(112,73,215,.16);box-shadow:0 25px 60px rgba(80,50,180,.16)}
+body.light .guestbook-title{color:#17123f}
+body.light .guestbook-desc{color:#5b5290}
+body.light .guestbook-input{background:#f8f5ff;border-color:#ddd3f7;color:#17123f}
 body.light .guestbook-status{color:#17794a}
-body.light .guestbook-btn{background:#1b1830;color:#fff}
-body.light .mindset-symbol{border-color:#e8e3f3;background:#fff;color:#4a3f8a}
-body.light .mindset h2{color:#1b1830}
-body.light .mindset p{color:#7a74a0}
-body.light .footer-box{background:linear-gradient(135deg,#e6dcff,#ffd9ec);border:1px solid #e6dcf7}
-body.light .footer h2{color:#1b1830}
-body.light .footer-bottom{color:#3a3558}
-body.light .credits{color:#7a74a0}
+body.light .guestbook-btn{background:linear-gradient(135deg,#4141ca,#a43bd0);color:#fff}
+body.light .mindset-symbol{border-color:rgba(112,73,215,.2);background:#fff;color:#7049d7}
+body.light .mindset h2{color:#17123f}
+body.light .mindset p{color:#6a5fb0}
+body.light .footer-box{color:#fff;box-shadow:0 45px 100px rgba(90,60,200,.35)}
+body.light .credits{color:#6a5fb0}
 
 /* RESPONSIVE */
 @media(max-width:950px){
@@ -220,10 +207,14 @@ body.light .credits{color:#7a74a0}
   .about-window:hover{transform:none}
   .work-stage{padding:40px 24px;border-radius:36px}
   .internet-box{padding:50px 30px;min-height:auto;border-radius:36px}
-  .find-network{position:relative;right:auto;top:auto;transform:none;width:100%;height:auto;margin-top:35px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-  .find-ring{display:none}
-  .find-core{grid-column:span 2;position:relative;left:auto;top:auto;transform:none!important;margin:0 auto 20px;animation:none}
-  .find-card{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:100%!important;justify-content:flex-start}
+  .find-hint{display:none}
+  .orbit{position:relative;right:auto;top:auto;transform:none;width:100%;height:auto;margin-top:35px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .orbit-ring{display:none}
+  .orbit-core{grid-column:span 2;position:relative;left:auto;top:auto;transform:none!important;margin:0 auto 10px;animation:none}
+  .orbit-track{display:contents;animation:none}
+  .orb{position:static;width:auto;height:auto;transform:none}
+  .orb-in{position:static;animation:none!important;transform:none!important}
+  .orb-card{width:100%}
   .footer-box{padding:45px 30px;min-height:auto;border-radius:36px;gap:40px}
 }
 @media(max-width:580px){
@@ -238,12 +229,11 @@ body.light .credits{color:#7a74a0}
   .about-box,.internet-box,.footer-box{padding:35px 20px;border-radius:26px}
   .about-title,.work-title,.find-header h2{font-size:32px}
   .about-copy{font-size:14px}
+  .orbit{grid-template-columns:1fr}
+  .orbit-core{grid-column:span 1;width:105px;height:105px}
   .work-stage{padding:30px 16px;border-radius:26px}
   .work-grid{grid-template-columns:1fr}
   .work-heading h3{font-size:28px;line-height:1.05}
-  .find-network{grid-template-columns:1fr;gap:10px;margin-top:25px}
-  .find-core{grid-column:span 1;width:105px;height:105px}
-  .find-card{padding:14px 16px;border-radius:14px}
   .guestbook-box{padding:30px 20px;border-radius:24px}
   .guestbook-form{flex-direction:column}
   .guestbook-btn{width:100%}
@@ -387,7 +377,7 @@ body.light .credits{color:#7a74a0}
               </div>
             </a>
 
-            <a class="proj" href="https://github.com/justmishchief/mini-arcade" target="_blank" rel="noopener">
+            <a class="proj" href="https://justmishchief.github.io/mini-arcade/" target="_blank" rel="noopener">
               <div class="proj-body">
                 <div class="proj-top">
                   <div>
@@ -396,8 +386,8 @@ body.light .credits{color:#7a74a0}
                   </div>
                   <div class="project-arrow">↗</div>
                 </div>
-                <p class="proj-desc">a collection of small arcade games in the browser.</p>
-                <span class="proj-status">built</span>
+                <p class="proj-desc">a collection of small arcade games in the browser. still adding more.</p>
+                <span class="proj-status">live · still building</span>
               </div>
             </a>
 
@@ -411,7 +401,7 @@ body.light .credits{color:#7a74a0}
                   <div class="project-arrow">↗</div>
                 </div>
                 <p class="proj-desc">a co-op diner game made for Hack Club Third Space.</p>
-                <span class="proj-status">built</span>
+                <span class="proj-status wip">work in progress</span>
               </div>
             </a>
 
@@ -470,25 +460,23 @@ body.light .credits{color:#7a74a0}
             <div class="section-label">03 / network</div>
             <h2>FIND ME<br>IN THE WILD</h2>
             <p class="find-sub">Available whenever procrastination allows.</p>
+            <p class="find-hint">hover to pause the orbit ↻</p>
           </div>
 
-          <div class="find-network">
-            <div class="find-ring r1"></div>
-            <div class="find-ring r2"></div>
-            <div class="find-ring r3"></div>
-
-            <div class="find-core">
+          <div class="orbit">
+            <div class="orbit-ring o1"></div>
+            <div class="orbit-ring o2"></div>
+            <div class="orbit-core">
               <div class="core-symbol">★</div>
               <div class="core-name">MISHIKA</div>
               <div class="core-small">@justmishchief</div>
             </div>
-
-            <a class="find-card card-github" href="https://github.com/justmishchief" target="_blank" rel="noopener"><div class="find-icon">⌘</div><strong>GitHub ↗</strong></a>
-            <a class="find-card card-discord" href="https://discord.com/users/1509588661098909778" target="_blank" rel="noopener"><div class="find-icon">◉</div><strong>Discord ↗</strong></a>
-            <a class="find-card card-instagram" href="https://www.instagram.com/justmishchief/" target="_blank" rel="noopener"><div class="find-icon">◎</div><strong>Instagram ↗</strong></a>
-            <a class="find-card card-x" href="https://x.com/justmishchief" target="_blank" rel="noopener"><div class="find-icon">𝕏</div><strong>X ↗</strong></a>
-            <a class="find-card card-reddit" href="https://www.reddit.com/user/justmishchief/" target="_blank" rel="noopener"><div class="find-icon">●</div><strong>Reddit ↗</strong></a>
-            <a class="find-card card-slack" href="https://hackclub.enterprise.slack.com/team/U0BBNTHLJMR" target="_blank" rel="noopener"><div class="find-icon">✣</div><strong>Slack ↗</strong></a>
+            <div class="orbit-track">
+              <div class="orb" style="--a:-135deg"><div class="orb-in"><a class="orb-card" href="https://github.com/justmishchief" target="_blank" rel="noopener"><span class="orb-icon">⌘</span><span><span class="orb-name">GitHub ↗</span><span class="orb-sub">code &amp; chaos</span></span></a></div></div>
+              <div class="orb" style="--a:-45deg"><div class="orb-in"><a class="orb-card" href="https://hackclub.enterprise.slack.com/team/U0BBNTHLJMR" target="_blank" rel="noopener"><span class="orb-icon">✣</span><span><span class="orb-name">Slack ↗</span><span class="orb-sub">hack club</span></span></a></div></div>
+              <div class="orb" style="--a:45deg"><div class="orb-in"><a class="orb-card" href="https://discord.com/users/1509588661098909778" target="_blank" rel="noopener"><span class="orb-icon">◉</span><span><span class="orb-name">Discord ↗</span><span class="orb-sub">say hi</span></span></a></div></div>
+              <div class="orb" style="--a:135deg"><div class="orb-in"><a class="orb-card" href="https://www.linkedin.com/in/mishika-73120b42a" target="_blank" rel="noopener"><span class="orb-icon">in</span><span><span class="orb-name">LinkedIn ↗</span><span class="orb-sub">the serious one</span></span></a></div></div>
+            </div>
           </div>
         </div>
       </div>
